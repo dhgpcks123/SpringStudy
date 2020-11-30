@@ -1,0 +1,53 @@
+# day02
+
+spring 프로젝트 폴더 구조
+
+	src
+		main
+			java		-- java 코딩하는 부분
+			resources 
+			webapp		-- 뷰 파일이 위치하는 부분/jsp : WebContent
+				1)		<-- jsp ok	컨트롤러 없이 호출할 수 있는 뷰
+				resources
+				WEB-INF
+					classes
+					spring
+					views
+						2)		<-- jps ok	컨트롤러를 통해서 호출해야하는 뷰
+						
+						
+-------------------------------------------------------------------------------------------
+스프링 MVC 프로젝트 셋팅
+
+	1. 서블릿 등록
+	
+		/WEB-INF/web.xml
+		==>
+			<!-- Processes application requests -->
+			<servlet>
+				<servlet-name>appServlet</servlet-name>
+					--> 서블릿에 부여하는 이름(개발자가 마음대로 정하면 된다
+				<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					--> 사용할 서블릿 클래스 경로
+				<init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+						--> 지정한 서블릿 클래스의 환경 설정을 담당할
+							xml 파일을 지정하는 부분(파일이름은 아무거나 마음대로 정해도 된다)
+							단, 반드시 해당 경로에 파일이 존재해야 한다.
+							
+				</init-param>
+				<load-on-startup>1</load-on-startup>
+					--> 서블릿이 해당할 우선순위를 지정하는 태그
+			</servlet>
+			
+			
+참고 ]
+	하나의 스프링에 서블릿은 여러개 만들 수 있다.
+	그리고 각각의 서블릿은 다른 요청을 처리하도록 할 수 있다.
+	
+	예를 들어서
+	유저용 서브릿, 관리자용 서블릿을 따로 만들어서
+	각각의 다른 요청을 처리할 수 있다.
+	
+	다만 이 때는 서블릿 이름과 환경 설정파일의 이름을 다르게 지정해야 한다.			

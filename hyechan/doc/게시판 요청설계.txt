@@ -1,0 +1,55 @@
+# 파일게시판 요청설계
+
+-----------------------------------------------------------------------------
+# 게시글 리스트 폼 요청
+요청내용 : /cls/board/boardList.cls
+파라미터 : [ nowPage ]
+컨트롤러 : com.increpas.cls.controller.board.Board
+뷰	  : /WEB-INF/views/com/increpas/cls/board/BoardList.jsp
+-----------------------------------------------------------------------------
+# 게시글 작성 폼 요청
+요청내용 : /cls/board/boardWrite.cls
+파라미터 : [ id ]
+컨트롤러 : com.increpas.cls.controller.board.BoardWrite
+뷰	  : /WEB-INF/views/com/increpas/cls/board/BoardWrite.jsp
+-----------------------------------------------------------------------------
+# 게시글 작성 처리 요청
+요청내용 : /cls/board/boardWriteProc.cls
+파라미터 : title, body[, file ]
+컨트롤러 : com.increpas.cls.controller.board.BoardWriteProc
+뷰	  : redirect ] 
+				성공 : /cls/board/boardList.cls
+				실패 : /cls/board/boardWrite.cls
+-----------------------------------------------------------------------------
+# 게시글 상세보기 요청
+요청내용 : /cls/board/boardDetail.cls
+파라미터 : bno
+컨트롤러 : com.increpas.cls.controller.board.BoardDetail
+뷰	  : /WEB-INF/views/com/increpas/cls/board/BoardDetail.jsp
+-----------------------------------------------------------------------------
+# 게시글 수정 폼보기 요청 
+요청내용 : /cls/board/boardEdit.cls
+파라미터 : bno
+컨트롤러 : com.increpas.cls.controller.board.BoardEdit
+뷰	  : /WEB-INF/views/com/increpas/cls/board/BoardEdit.jsp
+-----------------------------------------------------------------------------
+# 게시글 수정 처리 요청1 (비동기)
+요청내용 : /cls/board/boardEditProc.cls
+파라미터 : bno, title, body[, file ]
+컨트롤러 : com.increpas.cls.controller.board.BoardEditProc
+뷰	  : Ajax ] 
+-----------------------------------------------------------------------------
+# 게시글 수정 처리 요청2 (동기)
+요청내용 : /cls/board/boardEditProc.cls
+파라미터 : bno, title, body[, file ]
+컨트롤러 : com.increpas.cls.controller.board.BoardEditProc
+뷰	  : redirect ] 
+				성공	- /cls/board/boardDetail.cls
+				실패	- /cls/board/boardEdit.cls
+-----------------------------------------------------------------------------
+# 게시글 리다이렉트 폼보기 요청 
+요청내용 : /cls/board/redirect.cls
+파라미터 : bno, nowPage
+컨트롤러 : com.increpas.cls.controller.board.BoardRedirect
+뷰	  : /WEB-INF/views/com/increpas/cls/board/redirect.jsp
+-----------------------------------------------------------------------------
