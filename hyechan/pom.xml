@@ -146,25 +146,33 @@
 		    <artifactId>spring-jdbc</artifactId>
 		    <version>4.3.18.RELEASE</version>
 		</dependency>
-
-		<!-- ojdbc6 MAVEN server에서 가져오기-->
+		
+		<!--  커넥션 풀 사용 라이브러리 추가 -->
 		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		
+
+		<!-- ojdbc6 MAVEN repository에서 가져오기-->
+	<!-- 	<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
 		    <artifactId>ojdbc6</artifactId>
 		    <version>11.2.0.4</version>
-		</dependency>
+		</dependency> -->
 
 <!-- MAVEN에 등록 안되어있고, jar파일로 다운받아온 거 쓰겠다?  -->
 <!-- 일단 src/main/resources/lib 패키지 만들고 아래에 jar파일 넣으셈 -->
-<!-- 
+
 		<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
 		    <artifactId>ojdbc6</artifactId>
 		    <version>11.2.0.4</version>
 		    <scope>system</scope>
-		    <systemPath>${basedir}/src/main/resources/lib/ojdbc6.jar</systemPath>
+		    <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc6.jar</systemPath>
 		</dependency>
--->		
+	
 		
 		<!-- myBatis Setting -->
 		<!-- myBatis 를 사용하기 위한 라이브러리  -->

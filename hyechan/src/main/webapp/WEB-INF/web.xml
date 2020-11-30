@@ -32,7 +32,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/cls-context.xml</param-value>
 		</init-param>
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>1</load-on-startup> <!-- 우선순위 -->
 	</servlet>
 
 		
