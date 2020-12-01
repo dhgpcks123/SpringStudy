@@ -3,12 +3,18 @@
 	PUBLIC "-//mybatis.org//DTD config 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	
+	<!-- 마이바티스에서 사용할 자바 타입의 별칭 설언하는 부분... -->
+	<!-- 마이바티스!=자바, 자바의 클래스타입을 써야하는데...
+		 파라미터 한 개만 받을 수 있어서 VO로 한번에 넘겨주기러 했음-->
 	<typeAliases>
 		<typeAlias alias="mVO" type="com.increpas.cls.vo.MemberVO" />
+<!-- 	<typeAlias alias="string" type="java.lang.String" /> String, int같은 건 기본셋팅해놓음 : MemberSQL.xml보셈 -->
 	</typeAliases>
 	
 	<mappers>
+		<!-- 질의명령 sql 가져오셈ㅋ ㅇㅋ -->
+		<!-- 일단.. 2개 가져왔겠지? 그걸 구분해주기위해서 쟤네한테 namespace와 id 줘서 가져올거야.-->
 		<mapper resource="com/increpas/cls/sql/MemberSQL.xml" />
+		<mapper resource="com/increpas/cls/sql/BoardSQL.xml" />
 	</mappers>
 </configuration>

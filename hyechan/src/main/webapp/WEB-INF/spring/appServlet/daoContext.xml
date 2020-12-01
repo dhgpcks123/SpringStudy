@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- <beans:beans -->
 <beans
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,6 +8,8 @@
 						https://www.springframework.org/schema/beans/spring-beans.xsd 
 						http://www.springframework.org/schema/context 
 						https://www.springframework.org/schema/context/spring-context-4.3.xsd">
-	<bean id="mDao" class="com.increpas.cls.dao.MemberDao"/>
-	
-</beans>
+
+<!-- 	<beans:bean id="mDao" class="com.increpas.cls.dao.MemberDao" /> -->
+	<bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
+<!-- </beans:beans> -->
+</beans> <!-- 겹치는 거 없으면 그냥 써. 별칭 주지 말고 -->
