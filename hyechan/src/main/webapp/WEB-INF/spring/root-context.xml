@@ -62,18 +62,23 @@
 		  	 <property name="maxActive" value="8"/>
 		  </bean>
 		  
-		  <!--dbcp/위에꺼랑 다른 거야. 환경설정 해줘야지. myBatis 환경 설정. 객체형태로 만들어둬야해 : 마이바티스 연결하고 -->
+		  <!--DBCP/JSP DBCP파일 보셈... 환경설정 해줘야지. myBatis 환경 설정. 객체형태로 만들어둬야해 : 마이바티스 연결하고 -->
 		  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		  	<property name="dataSource" ref="dataSource"/>
 		  	<property name="configLocation" value="classpath:/resources/mybatis-config.xml"/>
+		  	<!-- 이게 지금 src-main-java-resources-mybatis-config를 bean시키는거야. -->
 		  </bean>
-		  <!-- bean : 객체만들기야! java의 new, javascript의  -->
 		  
-		  <!-- new/ 실제로 쓸 때. 커넥션 한 개 꺼내오는거겠지? 그게 이거임. : 한개 꺼내고. -->
+		  <!-- mybatis-spring 라이브러리에서 가져옴. 
+		  new/ 실제로 쓸 때. 커넥션 한 개 꺼내오는거겠지? 그게 이거임.
+		  한개 꺼내서 new시키고... 안에서 dao작업들(=db작업//rs.next...)결과물 꺼내주는 역할을 한다 -->
 		  <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		  	<constructor-arg index="0" ref="sqlSessionFactory" />
 		  </bean>
-		  <!-- spring이 자동으로 만들어주는 객체를 쓰고 있어(bean처리). 다시 new하면? 그게 깨질 수 있겠지??
+
+		  <!-- bean : 객체만들기야! java의 new, javascript의 ... -->
+		  <!--
+		  spring이 자동으로 만들어주는 객체를 쓰고 있어(bean처리). 다시 new하면? 그게 깨질 수 있겠지??
 		  그래서 new명령을 만들지 마시오. new는 클래스마다 new만나는 순간 했었는데... spring은 젤 처음에
 		  서버열기 -> web.xml -> root-context 읽어 그렇게 모든 게 다 new 됨. 왜 그렇게 할까??? 컨테이너???
 		   -->

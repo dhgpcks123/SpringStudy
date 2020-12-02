@@ -11,7 +11,7 @@
 컨트롤러 : com.increpas.cls.controller.Member.loginPage
 뷰	  : /WEB-INF/views/member/Login.jsp
 ------------------------------------------------------------
-# 로그인 처리 요청
+* 로그인 처리 요청
 요청내용 : /cls/member/loginProc.cls
 파라미터 : id, pw
 컨트롤러 : com.increpas.cls.controller.member.LoginProc
@@ -19,11 +19,25 @@
 			성공 : /cls/main.cls
 			실패 : /cls/member/login.cls
 ------------------------------------------------------------
-# 로그아웃 처리 요청
+* 회원정보 보기 요청
+요청내용 : /cls/member/memberInfo.cls
+파라미터 : id [mno]
+컨트롤러 : com.increpas.cls.controller.member.MemberInfo
+뷰	  : /WEB-INF/views/com/increpas/cls/member/MemberInfo.jsp
+------------------------------------------------------------
+* 로그아웃 처리 요청
 요청내용 : /cls/member/logout.cls
 파라미터 : 무
 컨트롤러 : com.increpas.cls.controller.member.Logout
-뷰	  : redirect ] /cls/member/login.cls
+뷰	  : redirect ]
+		성공 : /cls/member/login.cls
+		실패 : /cls/main.cls
+------------------------------------------------------------
+* 회원이름 리스트 보기 요청
+요청내용 : /cls/member/nameList.cls
+파라미터 : 무
+컨트롤러 : com.increpas.cls.controller.member.getList()
+뷰	  : member/memberList.jsp
 ------------------------------------------------------------
 # 회원가입 폼 보기 요청
 요청내용 : /cls/member/join.cls
@@ -45,22 +59,16 @@
 				성공 : /cls/guestBoard/guestBoard.cls
 				실패 : /cls/member/join.cls
 ------------------------------------------------------------
-# 회원정보 보기 요청
-요청내용 : /cls/member/memberInfo.cls
-파라미터 : id
-컨트롤러 : com.increpas.cls.controller.member.MemberInfo
-뷰	  : /WEB-INF/views/com/increpas/cls/member/MemberInfo.jsp
-------------------------------------------------------------
 # 회원정보 수정 처리 요청
 요청내용 : /cls/member/memberEdit.cls
 파라미터 : mail, avt
 컨트롤러 : com.increpas.cls.controller.member.MemberEdit
 뷰	  : ajax ] text
 ------------------------------------------------------------
-# 회원탈퇴 처리 요청
+* 회원탈퇴 처리 요청
 요청내용 : /cls/member/memberDel.cls
-파라미터 : (id,) pw 
-컨트롤러 : com.increpas.cls.controller.member.MemberDel
+파라미터 : mno,pw 
+컨트롤러 : com.increpas.cls.controller.Member.MemberDel()
 뷰	  : redirect ]
 			성공 : /cls/main.cls
 			실패 : /cls/member/memberInfo.cls

@@ -20,7 +20,55 @@
 		FROM
 			member
 		WHERE
-			id = #{id}
+			isshow='Y'
+			AND id = #{id}
 			AND pw = #{pw}
+	</select>
+	<select id="getInfo" resultType="mVO" parameterType="string">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND id = #{id}
+	</select>
+	<select id="getInfoNo" resultType="mVO" parameterType="int">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND mno = #{no}
+	</select>
+	<update id="del_memb" parameterType="mVO">
+		UPDATE
+			member
+		SET
+			isshow = 'N'
+		WHERE
+			mno= #{mno}
+			AND pw = #{pw}
+	</update>
+	<select id="nameList" resultType="mVO"> <!-- mybatis에서는 MemberDao에서 처리할꺼야 한 행 담을 데이터 넣어줘 -->
+		SELECT
+			mno, name 
+		FROM
+			member
+		WHERE
+			isshow='Y'
+	</select>
+	<select id="nameInfo" resultType="mVO" parameterType="mVO">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND mno = #{mno}
 	</select>
 </mapper>

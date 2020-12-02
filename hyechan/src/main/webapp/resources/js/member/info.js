@@ -74,20 +74,25 @@ $(document).ready(function(){
 			$('#pw').focus();
 			return;
 		}
-		/*
+		
+
 		// 동기 방식 처리
 		
 		$('#dfrm').submit();
-		*/
+
+	
 		
+		
+		
+		var sno = $('#mno').val();
 		// 비동기 방식 처리
-		var sno = $('#no').val();
+		/*
 		$.ajax({
-			url: '/cls/member/ajaxDel.cls',
+			url: '/cls/member/memberDel.cls',
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				no: sno,
+				mno: sno,
 				pw: spw
 			},
 			success: function(obj){
@@ -104,6 +109,7 @@ $(document).ready(function(){
 				alert('*** 통신 실패 ***');
 			}
 		});
+		*/
 	});
 });
 

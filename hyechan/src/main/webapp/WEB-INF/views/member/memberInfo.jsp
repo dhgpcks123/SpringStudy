@@ -21,8 +21,8 @@
 		<form method="POST" action="/cls/member/memberDel.cls" 
 				id="dfrm" name="dfrm" style="display: none;"
 				class="w3-col w3-card-4 w3-padding w3-margin-bottom">
+			<input type="hidden" name="mno" id="mno" value="${DATA.mno}">
 			<label for="pw" class="w3-col m3 w3-text-grey ft18px">비밀번호 : </label>
-			<input type="hidden" name="no" id="no" value="${DATA.mno}">
 			<input type="password" id="pw" name="pw" 
 					class="w3-col m7 w3-input w3-border">
 			<div class="w3-col m2 pdh10">
