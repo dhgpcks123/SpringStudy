@@ -42,7 +42,7 @@
 		WHERE
 			avt = ano
 			AND isshow = 'Y'
-			AND mno = #{no}
+			AND mno = #{tno}
 	</select>
 	<update id="del_memb" parameterType="mVO">
 		UPDATE
@@ -71,4 +71,22 @@
 			AND isshow = 'Y'
 			AND mno = #{mno}
 	</select>
+	<insert id="addMember" parameterType="mVO" >
+		<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(mno)+1, 1001)
+			FROM
+				member
+			<!-- 여기의 mno는 mVO의 mno... -->
+		</selectKey>
+		INSERT INTO
+			member(mno, id, pw, name, mail, gen, avt)
+		VALUES(
+<!-- 			(SELECT NVL(MAX(mno)+1, 1001) FROM member), -->
+			#{mno},
+			#{id}, #{pw}, #{name}, #{mail}, #{gen}, #{avt}
+		)
+	</insert>
+	
+	
 </mapper>

@@ -12,6 +12,8 @@ import org.springframework.web.servlet.view.*;
 import com.increpas.cls.dao.*;
 import com.increpas.cls.util.*;
 import com.increpas.cls.vo.*;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.*;
 
 @Controller
 @RequestMapping("/member")
@@ -66,18 +68,107 @@ public class Member {
 	}
 */
 	@RequestMapping("/join.cls")
-	public ModelAndView joinForm(HttpSession session, RedirectView rd, ModelAndView mv) {
-		 	
-//		 이 함수내에서 처리할 내용이 로그인 되어있는 회원의 경우는 리다이렉트로 main.cls로 보낸다
+	public ModelAndView joinForm(HttpSession session, ModelAndView mv) {
+//	public ModelAndView joinForm(HttpSession session, RedirectView rd, ModelAndView mv) {
+//		이 함수내에서 처리할 내용이 로그인 되어있는 회원의 경우는 리다이렉트로 main.cls로 보낸다
 		String sid = (String) session.getAttribute("SID");
-		if(sid != null || sid.trim().length() != 0) {
+		if(sid != null) {
+			/*
 			rd.setUrl("/cls/main.cls");
 			mv.setView(rd);	//	redirect로 뷰를 호출하는 경우
+			*/
+			mv.setViewName("redirect:/main.cls"); // == redirect로 새롭게 요청하는 경우
 		} else {
+			//데이터만들고
+			List<AvatarVO> list = mDao.getAvtList();
+			//데이터 뷰 심고
+			mv.addObject("LIST", list);
+			//뷰 부르고
 			mv.setViewName("member/join"); // forward로 뷰를 부르는 경우
 		}
 		return mv;
 	}
+	
+	/* ResponseBody. Json 객체로 반환해줘 */
+	@RequestMapping("/idCheck.cls")
+	@ResponseBody
+	public HashMap<String, String> idCheck(String id) {
+		// 할 일
+		// 데이터베이스에서 조회하고
+		// 참고 json 형식 var 변수 = {키값:데이터, 키값:데이터};
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		/*
+		int cnt = mDao.getIdCnt(id);
+		String result =(cnt==0)?"OK":"NO" ;
+		map.put("'result'", "'"+result+"'");
+		  		▽ 한 줄로 줄입시다
+		 */
+		map.put("result", (mDao.getIdCnt(id) == 0) ? "OK" : "NO");
+		//==> { 'result':'OK' } or { 'result':'NO' }
+		return map;
+	}
+	@RequestMapping(value="/joinProc.cls", method=RequestMethod.POST)
+	@ResponseBody
+	public String joinProc(HttpServletRequest req, HttpSession session, MemberVO mVO) {
+		MultipartRequest multi;
+		String path = req.getSession().getServletContext().getRealPath("resources/img/upload");
+		String result ="OK";
+		try {
+			multi = new MultipartRequest(req, path, 1024*1024*10, "UTF-8", new DefaultFileRenamePolicy());
+			
+			String id= multi.getParameter("id");
+			String pw = multi.getParameter("pw");
+			String name = multi.getParameter("name");
+			String mail = multi.getParameter("mail");
+			String gen = multi.getParameter("gen");
+			String sno = multi.getParameter("avt");
+			int avt = Integer.parseInt(sno);
+			
+			mVO.setId(id);
+			mVO.setPw(pw);
+			mVO.setName(name);
+			mVO.setMail(mail);
+			mVO.setGen(gen);
+			mVO.setAvt(avt);
+			System.out.println(id);
+			
+			int cnt = mDao.insertMember(mVO);
+			if(cnt == 1) {
+				session.setAttribute("SID", id);
+			} else {
+				result = "NO";
+			}
+		}catch(Exception e) {
+			System.out.println("###데이터 전송 실패###");
+			e.printStackTrace();
+		}
+		String str ="";
+			System.out.println(mVO.getId() +" 엄... ");
+		str = mVO.getId();
+		return result;
+	}
+	/*
+	@RequestMapping("/joinProc.cls")
+	public ModelAndView joinProc(ModelAndView mv, HttpSession session, MemberVO mVO) {
+		System.out.println("/joinProc 동기 처리");
+		// 할일
+		// 데이터베이스 작업하고
+		int cnt = mDao.insertMember(mVO);
+		if(cnt == 1) {
+			// 성공하면 로그인처리하고
+			session.setAttribute("SID", mVO.getId());
+			// 메인페이지로 이동하고
+			mv.setViewName("redirect:/main.cls");
+		}else {
+			// 실패한 경우
+			// 회원가입페이지로 다시 이동시키고
+			mv.setViewName("redirect:/member/join.cls");
+		}
+		return mv;
+	}
+	*/
+	
 	
 	@RequestMapping("/memberInfo.cls")
 	public ModelAndView getInfo(ModelAndView mv, HttpSession session, RedirectView rv) {
@@ -92,6 +183,15 @@ public class Member {
 		}
 		return mv;
 	}
+	
+	@RequestMapping("/memberInfo2.cls")
+	@ResponseBody
+	public MemberVO getInfo(MemberVO mVO) {
+		mVO = mDao.getInfo(mVO.getMno());
+		return mVO;
+	}
+	
+	
 	//요청하는데 mno파라미터 넘기면서 POST방식으로 요청시키는 경우 아래에꺼 실행시켜라.
 	@RequestMapping(value="/memberInfo.cls", params="mno", method=RequestMethod.POST)
 	public ModelAndView getInfo(ModelAndView mv, HttpSession session, RedirectView rv, int mno) {
@@ -140,6 +240,7 @@ public class Member {
 		mv.setViewName("member/memberList");
 		
 		return mv;
-	}
-
+	}	
+	
+	
 }

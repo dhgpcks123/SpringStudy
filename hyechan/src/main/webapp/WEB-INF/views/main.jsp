@@ -45,6 +45,9 @@
 					
 					<div class="w3-col mt10">
 						<div class="w3-col m3 pdh10">
+							<h5 class="w3-col w3-button w3-pink w3-hover-light-green" id="mlbtn">회원목록</h5>
+						</div>
+						<div class="w3-col m3 pdh10">
 							<h5 class="w3-col w3-button w3-pink w3-hover-light-green" id="gbtn">방명록</h5>
 						</div>
 						<div class="w3-col m3 pdh10">

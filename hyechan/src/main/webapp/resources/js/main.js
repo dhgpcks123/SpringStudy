@@ -43,6 +43,9 @@ $(document).ready(function(){
 			case 'sbtn':
 				spath = '/cls/survey/surveyInfo.cls';
 				break;
+			case 'mlbtn':
+				spath = '/cls/member/nameList.cls';
+				break;
 		}
 		
 		$(location).attr('href', spath);

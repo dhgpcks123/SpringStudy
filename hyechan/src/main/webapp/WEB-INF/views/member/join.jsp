@@ -70,14 +70,14 @@
 				<label class="w3-col l3 m3 w3-right-align w3-padding clslbl">아바타 선택 : </label>
 				<div class="w3-col l9 m12 w3-padding">
 					<div class="w3-col" id="avtfr">
-						<c:forEach var="data" items="${LIST}">
-							<div class="w3-third w3-center w3-padding avt${data.gen}fr" style="display: none;">
-								<input type="radio" class="w3-col w3-radio-medium avt" name="avt" value="${data.ano}">
-								<div class="w3-col w3-border imgbox">
-									<img src="/cls/img/avatar/${data.savename}" class="imgsrc">
-								</div>
+<c:forEach var="data" items="${LIST}">
+						<div class="w3-third w3-center w3-padding avt${data.gen}fr" style="display: none;">
+							<input type="radio" class="w3-col w3-radio-medium avt" name="avt" value="${data.ano}">
+							<div class="w3-col w3-border imgbox">
+								<img src="/cls/img/avatar/${data.savename}" class="imgsrc">
 							</div>
-						</c:forEach>
+						</div>
+</c:forEach>
 					</div>
 				</div>
 			</div>

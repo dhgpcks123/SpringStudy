@@ -28,7 +28,7 @@
 * 로그아웃 처리 요청
 요청내용 : /cls/member/logout.cls
 파라미터 : 무
-컨트롤러 : com.increpas.cls.controller.member.Logout
+컨트롤러 : com.increpas.cls.controller.member.Logout()
 뷰	  : redirect ]
 		성공 : /cls/member/login.cls
 		실패 : /cls/main.cls
@@ -36,25 +36,25 @@
 * 회원이름 리스트 보기 요청
 요청내용 : /cls/member/nameList.cls
 파라미터 : 무
-컨트롤러 : com.increpas.cls.controller.member.getList()
+컨트롤러 : com.increpas.cls.controller.Member.getList()
 뷰	  : member/memberList.jsp
 ------------------------------------------------------------
-# 회원가입 폼 보기 요청
+* 회원가입 폼 보기 요청
 요청내용 : /cls/member/join.cls
 파라미터 : 무
-컨트롤러 : com.increpas.cls.controller.member.Join
-뷰	  : /WEB-INF/views/com/increpas/cls/member/Join.jsp
+컨트롤러 : com.increpas.cls.controller.Member.joinFomr()
+뷰	  : /WEB-INF/views/member/Join.jsp
 ------------------------------------------------------------
-# 회원아이디 체크 처리 요청
+* 회원아이디 체크 처리 요청
 요청내용 : /member/idCheck.cls
 파라미터 : id
-컨트롤러 : com.increpas.cls.controller.member.IdCheck
+컨트롤러 : com.increpas.cls.controller.Member.idCheck()
 뷰	  : ajax ] JSON
 ------------------------------------------------------------
-# 회원가입 처리 요청
+* 회원가입 처리 요청
 요청내용 : /cls/member/joinProc.cls
-파라미터 : name, id, pw, mail, tel, gen, avt
-컨트롤러 : com.increpas.cls.controller.member.JoinProc
+파라미터 : (name, id, pw, mail, tel, gen, avt) memberVO
+컨트롤러 : com.increpas.cls.controller.Member.joinProc()
 뷰	  : redirect ] 
 				성공 : /cls/guestBoard/guestBoard.cls
 				실패 : /cls/member/join.cls

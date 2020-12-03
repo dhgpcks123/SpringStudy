@@ -125,6 +125,9 @@ $(document).ready(function(){
 	
 	// 회원가입처리 버튼
 	$('#jbtn').click(function(){
+		
+	/*
+	//(동기 방식 처리)
 		// 할일
 		// 데이터 유효성 검사하고
 		var sid = $('#id').val();
@@ -144,6 +147,38 @@ $(document).ready(function(){
 		$('#frm').attr('action', '/cls/member/joinProc.cls'); 
 		
 		$('#frm').submit();
+		
+	*/
+	//(비동기 방식 처리)
+		// 할일
+		// form 태그 객체를 읽어와서 formData 를 만들어준다.
+		// 비동기 통신에서 form태그를 전송할 경우
+		// 해당 form 태그의 encType 속성이 반드시 기술되어야 한다.
+		// 이거 공부한 이유??? 비동기통신으로 파일도 전송하기 위함
+		var el = $('#frm');
+		$(el).attr('encType', 'multipart/form-data');
+		$(el).append('<input type="hidden" name="aProc value="OK">');
+		var formData = new FormData($(el)[0]);
+
+		$.ajax({
+			url: '/cls/member/joinProc.cls',
+			type: 'POST',
+			dataType: 'text',
+			processData: false,
+			contentType: false,
+			data:formData,
+			success: function(obj){
+				alert('*** 성공 메세지 : ' + obj);
+				if(obj =='OK'){
+					$(location).attr('href', '/cls/main.cls');
+				} else{
+					alert('*** 회원가입 실패 ***');
+				}
+			},
+			error: function(){
+				alert('### 통신 실패 ###')				
+			}
+		});
 	});
 });
 

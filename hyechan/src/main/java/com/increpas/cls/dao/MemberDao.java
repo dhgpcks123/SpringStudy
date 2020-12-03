@@ -1,10 +1,10 @@
 package com.increpas.cls.dao;
 
 import java.util.*;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mybatis.spring.*;
+import org.springframework.beans.factory.annotation.*;
 
-import com.increpas.cls.vo.MemberVO;
+import com.increpas.cls.vo.*;
 
 public class MemberDao {
 	
@@ -20,13 +20,20 @@ public class MemberDao {
 		// selectOne 질의결과 한 개 있으면 쓰는 거 selectOne
 		// 질의결과 여러개다? selectList
 	}
+	
 	//회원 정보조회 전담처리 함수
 	public MemberVO getInfo(String id) {
 		return sqlSession.selectOne("mSQL.getInfo", id);
 	}
+	
 	//회원 정보조회 전담처리 함수
-	public MemberVO getInfo(int no) {
-		return sqlSession.selectOne("mSQL.getInfoNo", no);
+	public MemberVO getInfo(int tno) {
+		return sqlSession.selectOne("mSQL.getInfoNo", tno);
+	}
+	
+	//회원 정보조회 전담처리함수
+	public MemberVO getNameInfo(MemberVO mVO){
+		return sqlSession.selectOne("mSQL.nameInfo", mVO);
 	}
 	
 	//회원 탈퇴 전담처리함수
@@ -38,9 +45,20 @@ public class MemberDao {
 	public List<MemberVO> getNameList(){
 		return sqlSession.selectList("mSQL.nameList");
 	}
-	//회원 정보조회 전담처리함수
-	public MemberVO getNameInfo(MemberVO mVO){
-		return sqlSession.selectOne("mSQL.nameInfo", mVO);
+	
+	//아바타 리스트 가져오기 전담 처리함수
+	public List<AvatarVO> getAvtList(){
+		return sqlSession.selectList("aSQL.getAll");
+	}
+	
+	//회원 아이디체크 전담 처리함수
+	public int getIdCnt(String id) {
+		return sqlSession.selectOne("mSQL.idCount", id);
+	}
+	
+	//회원 가입 처리 전담 처리함수
+	public int insertMember(MemberVO mVO) {
+		return sqlSession.insert("mSQL.addMember", mVO);
 	}
 
 }
