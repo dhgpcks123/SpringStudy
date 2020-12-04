@@ -9,15 +9,5 @@
 						http://www.springframework.org/schema/context 
 						https://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-<!--
-	별칭을 주게 되면? 
-	<beans:bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
--->
-	<bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
-	<bean id="gDao" class="com.increpas.cls.dao.GBoardDao" />
-
-
-<!-- 별칭을 주게 되면?
-</beans:beans>// 겹치는 거 없으면 그냥 써. 별칭 주지 말고
--->
-</beans>
+	<bean id="gSrvc" class="com.increpas.cls.service.GBoardService" />
+</beans> <!-- 겹치는 거 없으면 그냥 써. 별칭 주지 말고 -->

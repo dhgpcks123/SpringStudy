@@ -39,6 +39,7 @@
 	<!--  빈처리 설정 파일 가져오기, dao여기서 가져와도 상관없어요. 근데 너무 많아지잖아요!! -->
 	<beans:import resource="daoContext.xml"/>
 	<beans:import resource="utilContext.xml"/>
+	<beans:import resource="srvcContext.xml"/>
 	<!--
 	<beans:import resource="jiwooContext.xml"/>
 	<beans:import resource="HwanContext.xml"/>

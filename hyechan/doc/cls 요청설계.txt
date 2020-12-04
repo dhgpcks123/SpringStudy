@@ -82,8 +82,14 @@
 ------------------------------------------------------------
 
 
-=============================================================
 ### 방명록 요청 설계
+=============================================================
+* 방명록 폼 보기 요청
+요청내용 : /cls/guestBoard/guestBoard.cls
+파라미터 : 무 (SID)
+컨트롤러 : com.increpas.cls.controller.GuestBoard.gBoardForm()
+뷰	  : /WEB-INF/views/com/increpas/cls/guestBoard/gBoardList.jsp
+------------------------------------------------------------
 
 # 방명록 더미데이터 삽입 요청
 요청내용 : /cls/guestBoard/initGDB.cls
@@ -91,16 +97,10 @@
 컨트롤러 : com.increpas.cls.controller.guestBoard.AddGDB
 뷰	  : redirect ] /cls/guestBoard/GuestBoard.jsp
 ------------------------------------------------------------
-# 방명록 폼 보기 요청
-요청내용 : /cls/guestBoard/guestBoard.cls
-파라미터 : 무 (SID)
-컨트롤러 : com.increpas.cls.controller.guestBoard.GuestBoard
-뷰	  : /WEB-INF/views/com/increpas/cls/guestBoard/GuestBoard.jsp
-------------------------------------------------------------
-# 방명록 글등록처리 요청
+* 방명록 글등록처리 요청
 요청내용 : /cls/guestBoard/gBoardWrite.cls
-파라미터 : 무 (SID)
-컨트롤러 : com.increpas.cls.controller.guestBoard.GBoardWrite
+파라미터 : body, (SID)
+컨트롤러 : com.increpas.cls.controller.GuestBoard.guestBoardWrite()
 뷰	  : redirect ] 
 				성공 : /cls/guestBoard/guestBoard.cls
 				실패 : /cls/member/login.cls
