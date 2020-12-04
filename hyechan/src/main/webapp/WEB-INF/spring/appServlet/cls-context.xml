@@ -16,6 +16,18 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 	
+	<!-- 12/3 멀티파트 폼태그에서 꺼내오기 했는데 mVO에서 null떳었죠?
+	joinProc함수Member.java에... 그거 이제 null안뜰꺼임. null인이유 멀티파트 폼태그에서 가져오는건데
+	그게 자동으로 연결 안됐거든. 그거 자동 연결 시켜준다.
+	 -->
+	<!-- 파일 업로드를 위한 뷰 서블릿 설정 -->
+	<beans:bean id="multipartResolver"
+				class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="50000000" />
+		<beans:property name="maxInMemorySize" value="50000000" />
+		<beans:property name="defaultEncoding" value="UTF-8" />
+	</beans:bean>
+	
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
  
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

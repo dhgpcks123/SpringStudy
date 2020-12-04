@@ -29,6 +29,11 @@ $(document).ready(function(){
 			reid = $('.avt:checked').next().children().eq(0).attr('id');
 		}
 		
+		$('#frm').attr('method', 'POST');
+		$('#frm').attr('action', '/cls/member/memberEditProc.cls');
+		$('#frm').submit();
+		
+		/*
 		$.ajax({
 			url: '/cls/member/memberEdit.cls',
 			type: 'POST',
@@ -59,6 +64,8 @@ $(document).ready(function(){
 				alert('### 통신 실패 ###');
 			}
 		});
+		*/
+		
 	});
 	
 	// 회원 탈퇴 처리

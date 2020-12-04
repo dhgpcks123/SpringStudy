@@ -87,6 +87,19 @@
 			#{id}, #{pw}, #{name}, #{mail}, #{gen}, #{avt}
 		)
 	</insert>
-	
+	<update id="editMember" parameterType="mVO">
+		UPDATE
+			member
+		<!--
+		형식 ]
+		 <trim prefix="SET" suffixOverrides=",">
+		-->
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="mail neq null">mail = #{mail},</if>
+			<if test="avt neq 0">avt = #{avt},</if>
+		</trim>
+		WHERE
+			id = #{id}
+	</update>
 	
 </mapper>

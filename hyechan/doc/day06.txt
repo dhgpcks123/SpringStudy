@@ -1,0 +1,160 @@
+# myBatis에서 사용하는 조건 처리명령
+
+	1.	if
+		형식 ]
+		
+			<if test="조건식">내용</if>
+		
+	2.	choose ~ when ~ otherwise
+		형식 ]
+			
+			<choose>
+				<when test="조건식1">내용1</when>
+				<when test="조건식2">내용2</when>
+					...
+				<otherwise>내용</otherwise>
+			</choose>
+			
+	*****		
+	3.	trim
+		==> 질의 명령의 특성상 조건식을 처리할 때
+			(WHERE) 첫번째 조건은 그냥 쓰면 된다.
+			두번째 조건부터는 AND나 OR로 연결해야 한다.
+			또는
+			업데이트 질의 명령의 경우
+			업데이트 할 내용을 나열할 경우
+			각각의 내용이 , 를 기준으로 이어져야 한다.
+			
+			예 ]
+				UPDATE
+					member
+				SET
+					mail = ???,
+					avt = ?
+				WHERE
+					id = ?
+				==> 이 경우 메일만 수정하려면 mail = ??? 까지만 기술해야 하고
+					아바타만 변경되는 경우는 avt = ? 만 기술해야 한다.
+					둘 다 변경하는 경우는 위 구문처럼 작성을 해야한다.
+				
+			이 때 조건이 첫번째 나오는 것인지 아니면 두번째로 나오는 것인지에 따라서
+			붙여줘야 할 문자가 달라질 것이고
+			이 문제를 해결하기 위해서 만들어진 기능이다.
+			
+			
+		형식 1 ]
+			<trim prefix="WHERE" prefixOverrides="AND|OR">내용</trim>	
+		형식 2 ]
+			<trim prefix="SET" suffixOverrides=",">내용</trim>
+
+		예 ] 				
+			UPDATE
+				member
+			SET
+				mail = ???,
+				avt = ?
+			WHERE
+				id = ?
+				
+			==>
+			
+				UPDATE
+					member
+			   				//suffixOverrides 뒤에 뭐 오면 [ , ] 찍고 안 오면 찍지마
+				<trim prefix="SET" suffixOverrides=","> 
+					<if test="mail neq NULL">mail = #{mail},</if>
+					<if test="avt neq 0">avt = #{avt},</if>
+				</trim>
+				WHERE
+					id = #{id}
+	
+	4.	foreach
+		 형식 ]
+		 	<foreach item="변수이름" index="st" collection="데이터"
+		 			 open="???" separator="???" close="???>
+		 	</foreach>
+		 	
+		 ==> ArrayList에 담긴 데이터 갯수만큼 반복하면서
+		 	 특정 질의명령을 만들어주는 명령
+		 	 
+		 	 item		: 	변수
+		 	 index		:	순서를 기억할 변수
+		 	 collection	:	ArrayList(실제 데이터가 담긴 변수)
+		 	 open		:	반복 전 처리할 내용
+		 	 separator	:	매 반복마다 처리할 내용
+		 	 close		:	반복이 끝나면 처리할 내용
+		 	 
+		 예 ]
+		 
+		 	SELECT
+		 		*
+		 	FROM
+		 		avatar
+		 	WHERE
+		 	 	ano in (11)
+		 	 	ano in (11, 12)
+		 	 	ano in (11, 12, 13)
+		 	 	....
+		 	;
+		 	 
+		 	 ==>
+			 	SELECT
+			 		*
+			 	FROM
+			 		avatar
+			 	WHERE
+			 	 	ano in
+			 	 	<foreach item="data" index="idx" collection="list"
+			 	 			 open="(" close=")" separator=",">#{data}>
+			 	 	</foreach>
+			 	;
+		 	 
+		 	 
+		
+	5.	set
+		==> UPDATE 명령의 set 절을 만들어주는 태그
+			
+		형식 ]
+			<set>
+				<if test="">내용, </if>
+				<if test="">내용, </if>
+				<if test="">내용, </if>
+				...
+				<if test="">내용, </if>
+			</set>
+			
+			==>
+				UPDATE
+					member
+				<set>
+					<if test="pw != null">pw = #{pw},</if>
+					<if test="mail != null">mail = #{mail},</if>
+					<if test="avt != 0">avt = #{avt},</if>
+				</set>
+					
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

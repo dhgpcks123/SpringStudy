@@ -1,0 +1,198 @@
+# day04
+
+스프링 특징
+	1. 요청 처리가 클래스 단위가 아니고 함수단위이다
+	2. bean 처리가 가능하다
+	3. DI 기법을 사용한다
+	4. AOP 처리가 가능하다
+	
+bean 처리
+
+	형식 1 ]
+		<bean id="아이디" class="클래스경로" />
+		
+	형식 2 ]
+		<bean id="아이디" class="클래스경로">
+			<property name="변수이름" class="값" />
+			<property name="변수이름" class="값" />
+			<property name="변수이름" class="값" />
+		<bean>
+		
+		빈처리의 의미 : 
+		서버가 기동 될 때 필요한 클래스의 객체를 미리 new 시켜서 기억한다는 의미이다
+			(싱글톤 유지를 위해 스프링이 제공하는 객체를 사용하세요~)
+		https://jeong-pro.tistory.com/86	
+
+---------------------------------------------------------------------------------------------
+DI (Dependency Injection)
+	==> 우리말로 번역을 하자면 "의존주입"
+		어떤 클래스를 사용하는 데 있어서
+		해당 클래스 내에서 필요한 객체를 new 시켜서 만들어서 사용하지 않고
+		다른 곳에서 new 시킨 것을 주입받아서 사용하는 방법
+		
+		예 ]
+		
+			<bean id="jiwoo" class="com.increpas.cls.util.Jiwoo" />
+			
+				<-- Jiwoo jiwoo = new Jiwoo(); 와 같은 의미
+				
+		이처럼 XML 파일을 이용해서 new 시킨 객체를
+		자바소스에서 가지고 와서 사용할 수 있는데 이를 의존주입이라고 한다.
+---------------------------------------------------------------------------------------------
+자동 의존 주입
+	==> <bean> 처리된 객체를 필요한 곳에 어노테이션을 사용해서
+		자동적으로 생성된 객체를 사용가능 하도록 하는 것
+						
+		@Autowired 	
+		==> 모든 bean 처리된 클래스를 자동으로 찾아서 주입하는 어노테이션
+		
+		@Qualifier
+		==> 동일한 클래스가 여러번 bean 처리된 경우에
+			특정 객체를 선택하도록 하는 어노테이션
+				class -new> cls1, class -new> cls2 (선택)
+		
+		@Resource
+		==> 자동 주입할 클래스를 지정해서 주입하도록 하는 어노테이션
+		
+		참고 ]
+		
+			@Autowired	--> Spring전용
+			@Inject		--> 자바어플리케이션에서도 사용할 수 있음( 당근 스프링도 사용가능 )
+		
+		참고 ]
+		
+			@Autowired를 사용하는 지점
+				1.	변수 생성에서 사용할 수 있다(변수를 사용함과 동시에 객체주입)
+				2.	생성자 함수에서 사용할 수 있다.
+				3.	set함수에서 사용할 수 있다.
+				
+			이 때 어느곳에서 사용하던지 필요한 크래스가 자동 의존주입 되는 동일한 효과를 가진다
+			
+		주의사항 ]
+			
+			@Autowired는 선언한 그 다음 줄한 줄에 한행에 한해서만 적용된다.
+							
+			예 ]
+				MemberDao, BoardDao 모두 의존주입을 할 경우
+	
+				@Autowired
+				MemberDao mDao;
+				BoardDao bDao;
+					==> 이렇게 사용하면 안 된다
+					
+				@Autowired
+				MemberDao mDao;
+				@Autowired
+				BoardDao bDao;
+					==> 올바른 방법
+				
+---------------------------------------------------------------------------------------------
+
+예 ]
+
+	<bean id="memberDao"	class="com.jiwoo.web.dao.MemberDao" />		------ 1)
+	<bean id="print1"	class="com.jiwoo.web.util.MemberPrint />		------ 2)
+		<qualifier value="sysout" />		
+	</bean>			
+	<bean id="print2"	class="com.jiwoo.web.util.MemberPrint />		------ 3)
+				
+	public class MemberInfoPrint {
+		
+		@Autowired
+		public MemberInfoPrint(MemberDao mDao, @Qualifire("sysout") MemberPrint print){
+			이 경우 mDao에는 1)의 객체를 자동의존주입 할 거고
+			print의 경우는 2)의 객체를 자동의존주입 한다. (@Qualifire)
+			이렇게 특정 빈을 선택해서 자동의존주입 할 수 있다.
+		}
+	}			
+
+---------------------------------------------------------------------------------------------
+참고 ]
+	@Autowired를 사용한 경우
+	자동으로 <bean>을 찾아서 자동 주입을 하게 된다.
+	반대로 말하면 해당 <bean>을 못 찾는 경우는 에러가 발생한다.
+	
+	이런 경우를 대비해서 만약 <bean>을 찾지 못하더라도
+	에러 없이 진행시킬 수 있는 방법은( 자동 의존 주입은 안된 상태 )
+	
+	형식 ]
+		@Autowired(required=false)
+---------------------------------------------------------------------------------------------
+
+@Resource에 의한 자동 의존 주입
+==> @Autowired 보다 강력하지 않고
+	다만 <Bean>처리된 것 중에서 특정 <bean>	을 선택해서 자동 의존 주입하는 기능
+	
+	형식 ]
+	
+		@Resource(name="<bean>의 아이디")
+		변수선언
+		생성자
+		setter 함수
+	
+	예 ]
+		<bean id="memberDao" class="jiwoo.dao.MemberDao" />
+		
+		public class MemberJoinServicee {
+			@Resource(name ="memberDao")
+			MemberDao mDao;
+		}
+	
+	참고 ]
+		@Resource에서 원하는 빈을 찾는 원리
+			
+			1. name에 지정한 값과 동일한 id 값을 가진 빈을 찾아서 자동의존주입을 한다
+			2. 만약 id가 동일한 것이 없는 경우에는
+				클래스 이름을 이용해서 <bean>을 찾아서 자동의존주입 처리를 한다.
+			3. 만약 같은 이름이 중복되면 에러가 발생한다.
+				(이 때 @Qualifer를 이용해서 구분해서 처리하면 해결된다)
+	
+---------------------------------------------------------------------------------------------	
+참고 ]
+	의존주입에는 명시적 의존주입과 묵시적 자동주입이 존재한다
+	이 때 명시적 의존주입과 묵시적 자동주입이 같이 존재하는 경우에는
+	명시적 의존주입을 우선으로 처리한다.	
+		
+	xml
+		<bean id="memberDao" class="jiwoo.dao.MemberDao" />			---- 1)
+		<bean id="print1" class="jiwoo.util.MemberPrint" />			---- 2)
+		<bean id="print2" class="jiwoo.util.MemberPrint" />			---- 3)
+		
+		<bean id="infoPrint" class="jiwoo.util.MemberInfoPrint" />	---- 4)
+			명시적으로 set 함수를 이용해서 의존주입을 시키도록 한다
+			<property name="print" ref="print2" />		
+		</bean>		
+				
+		public class MemberInfoPrint{
+			@Autowired
+			MemberDao mDao;
+			@Autowired
+			MemberPrint print;	---- 2)보다 3)을 우선해서 의존주입해서 객체를 만든다.
+			명시적으로 print2를 이용해서 의존주입을 시켰기 때문에 print2가 의존주입된다.
+									 				 왜? 4)에서 ref="print2"쓰고 있어서
+		}		
+				
+---------------------------------------------------------------------------------------------	
+******
+참고 ]
+	자동의존주입의 전재 조건은
+		먼저 bean 처리가 되어 있어야 한다.		
+******		
+---------------------------------------------------------------------------------------------	
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				

@@ -1,0 +1,233 @@
+# day03
+
+1. pom.xml 수정 & 추가
+	--> 기본설정, 라이브러리추가
+	
+2. web.xml 수정 & 추가
+	--> 서블릿매핑
+	
+3. servlet-context.xml 수정
+	--> 공통 : img/js/css
+	cls-context.xml 수정
+	--> cls 프로젝트
+	
+4. root-context.xml 수정
+		<== 데이터베이스 관련 설정
+
+5. mybatis-config.xml 만들고 내용 추가
+		sql 파일 매핑 ==> 질의명령 xml 파일 만들고
+		typeAlias 추가 <== VO 클래스 매핑
+
+6.	dao 빈처리
+		==> dao XML 파일 import ...
+		dao XML : 사용할 DAO 클래스들을 빈처리
+		
+		<bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
+		
+			* ns: namespace의 약자
+			* xml은 스키마가 중요합니다
+			
+	XML 문서(Extensible Makrup Language)
+
+문서 작성 형식
+1. 시작은 <?xml version="1.0 encoding="UTF-8"?> 무조건 이 태그가 와야해
+
+2. encoding 방식은 반드시 UTF-8
+
+3. 루트 태그는 반드시 하나만 존재해야한다. HTML문서도 HTML하나만 존재하잖아.
+
+4. 루트 태그 내부에 서브태그는 여러 개 중복되어도 상관 없다.
+
+	예	]
+
+people.xml
+-------------------------------------------------------------------------------------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <people>안에 <person>안에 <name>,<id>,<age>정의 해놓은 거 : schemaLocation(구조), namespace(ns 태그 이름들) -->
+<!-- 태그별로 처리해줄 방식이 다르니까.. -->
+<web-app
+	version="3.1"
+	xmlns="주소"
+	xmlns:ningean(별칭)="주소"
+	ningean:schemaLocation=	"주소"
+							"주소"/>
+<people>
+	<person>
+		<name>이지우</name>
+		<id>jiwoo</id>
+		<age>26</age>
+	</person>
+	<person>
+		<name>장성환</name>
+		<id>hwan</id>
+		<age>27</age>
+	</person>
+	<person>
+		<name>박진우</name>
+		<id>jinwoo</id>
+		<age>20</age>
+	</person>
+</people>
+-------------------------------------------------------------------------------------
+
+
+<beans태그 class="org.springframework.~~"> class에 적힌 애를 객체로 만들어라는 태그
+	<beans:property name="이름" value="값"/>으로 셋팅해서
+	<beans:property name="이름" value="값"/>으로 셋팅해서
+</beans
+
+
+
+
+@Controller :	컨트롤러 역할을 하는 클래스에 붙여주는 어노테이션.
+				이거 안 써주면 컨트롤러 역할을 안함 (반드시..)
+				
+				서버가 구동되는 순간 
+
+@RequestMapping
+
+	1. 기본형식
+		@RequestMapping("요청내용")
+			
+			== RequestMapping(value="요청내용")
+			== RequestMapping(path="요청내용")
+			
+	=>
+	
+		@RequestMapping(value="/member/login.cls",
+						method=RequestMethod.POST,
+						params={"id","pw"})
+		==> 이 함수는 /member/login.cls로 요청하고
+			요청방식은 POST방식, 파라미터는 id와 pw가 전달 된 경우
+			이 함수를 실행하세요.....
+		@RequestMapping("/member/login.cls",
+						method=RequestMethod.POST,
+						params={"id","pw"})
+
+-------------------------------------------------------------------------------------
+뷰 처리
+	
+	MVC 패턴에서는 컨트롤러의 역활이 끝나면 뷰를 호출한다.
+	컨트롤러는 자신이 만든 데이터(Model)을 이용해서 화면을 구성할 뷰를 선택한다.
+	
+	스프링에서 뷰를 선택하는 방법
+	1. 반환값을 String으로 해서 뷰를 지정하는 방법
+		(JSP 프로젝트의 원리와 동일...)
+		
+	2. 반환값을 void로 해서 뷰를 지정하는 방법
+		==> 이 경우 스프링은 자동적으로 요청내용을 이용해서 뷰를 지정하게 된다.
+		
+		예 ]
+			http://localhost/cls/board/boardList.cls
+			이 경우 컨트롤러의 실행 함수의 반환값 타입을 void 로 지정하면
+			스프링은 자동적으로 요청 내용을 이용해서 뷰를 지정한다.
+			
+			==> return "board/boardList";
+			
+			결국 뷰는 
+			/WEB-INF/views/board/boardList.jsp 가 된다.
+			
+	실습 ]
+		
+		http://localhost/cls/test/test01.cls
+		로 요청했을 때 반환값 타입을 void로 해서 뷰가 보여지도록 처리하세요.
+
+
+
+
+	*****
+	3. 반환값 타입을 ModelAndView(스프링에서 만들어놓은) 클래스로 지정하는 방법
+		req.setAttribute로 데이터심었잖아? 근데 이젠 ModelAndView클래스에다가 심을거야. 		
+	
+		ModelAndView 클래스는 모델(데이터)과 뷰(JSP)를 관리할거야.
+		Model과 View를 동시 지정할 수 있는 특징이 있는 클래스
+		
+		장점
+			생산된 모델과 뷰를 한개의 클래스로 등록해서 사용할 수 있게 된다.
+			
+
+-------------------------------------------------------------------------------------
+
+요청 실행함수의 매개변수 역할
+	
+	결론적으로 규칙이 없고
+	컨트롤러 작업에 필요한 요소(객체)가 있으면 매개변수에 등록만해주면 됨
+	(매개변수리스트에 추가만 해주면) 스프링이 알아서 만들어서 함수를 실행해준다. ( 알아서 new해준단 말 (?) )
+
+	***
+	참고 ]
+		스프링은 파라미터를 VO클래스를 이용해서 받을 수 있다.
+		*getters and setters반드시 만들어줘야하고 input의 name과 VO의 name이 같아야함.
+		자동으로 바꿔줌
+		
+		장점 ]
+			파라미터가 많은 경우 일반적인 request로 받으면
+			코딩이 길어지고 복잡해진다(+형변환)
+			이 문제점을 해결하는것으로 VO클래스의 변수에
+			받은 데이터를 한꺼번에 저장해주는 것...
+		
+		방법 ]
+			1. 파라미터를 받을 수 있는 VO 클래스를 제작한다.
+				이 때 VO 클래스 안에는 getters & setters 함수가 만들어져야 한다.
+				
+				getXXXX()	-	JSTL에서 사용된다.
+				setXXXX()	-	스프링에서 파라미터를 받아서 기억하는데 사용된다.
+				
+				따라서
+				파라미터는 해당 변수의 set함수를 호출해서 데이터를 기억하게 된다.
+			
+			2.	매개변수에 VO 클래스를 기술만 해주면 스프링이 알아서 파라미터를 받아준다.
+			
+		***
+		각골명심 ]
+			반드시 input 태그의 name 속성값과 VO 클래스의 변수이름이 같아야 한다.
+				
+		--매개변수 (MemberVO mVO)로 해도 되고, (String id)이렇게도 해도 된다. 단 id <- input name과 같아야 함
+
+
+--------------------------------------------------------------------------------------------------------------
+Spring의 특징
+
+	1. 요청이 컨트롤러 단위가 아니고 함수 단위이다.
+		즉, 우리가 JSP 프로젝트에서 하나의 요청이 생기면
+		하나의 컨트롤러 클래스를 만들고 작업을 해야 했다.
+		
+		하지만 스프링에서는 컨트롤러 클래스는 한 개만 만들고
+		그 안에 여러개의 함수를 이용해서 각각의 요청을 처리하도록 한다.
+
+
+	*
+	2. 빈처리를 할 수 있다.
+		사용할 클래스를 한 곳에 모아서 new 처리를 한다.
+		
+		==> 소스 관리가 편해진다.
+		
+	***
+	3. DI 기법 (Autowired)..
+		우리말로 해석하면 "느슨한 주입"이라고 하며
+		빈 처리에서 new 시킨 클래스를 자동적으로 사용하는 기법
+		
+		
+	***
+	4. AOP 기법
+		우리말로 말하면 전처리 클래스라고 하고
+		특정작업이 실행되는 순간 필요한 다른 작업을 우선 처리하는 기법임
+		
+		예를 들어 로그인 검사는 거의 모든 작업에서 필요한 작업이다.
+		공통적인 작업이 매번 코딩이 되어야 한다면 불편하다.
+		이것을 해소할 수 있다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

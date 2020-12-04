@@ -59,7 +59,14 @@
 				성공 : /cls/guestBoard/guestBoard.cls
 				실패 : /cls/member/join.cls
 ------------------------------------------------------------
-# 회원정보 수정 처리 요청
+* 회원정보 수정 동기 처리 요청
+요청내용 : /cls/member/memberEditProc.cls
+파라미터 : mail, avt => mVO
+컨트롤러 : com.increpas.cls.controller.Member.memberEditProc()
+뷰	  	 : redirect ] 성공 : /cls/member/memberInfo.cls
+					  실패 : /cls/member/memberInfo.cls
+------------------------------------------------------------
+# 회원정보 수정 비동기 처리 요청
 요청내용 : /cls/member/memberEdit.cls
 파라미터 : mail, avt
 컨트롤러 : com.increpas.cls.controller.member.MemberEdit
