@@ -61,4 +61,9 @@ public class MemberDao {
 		return sqlSession.insert("mSQL.addMember", mVO);
 	}
 
+	//회원 정보 수정 전담 처리함수
+	public int editMember(MemberVO mVO) {
+		return sqlSession.update("mSQL.editMember", mVO);
+	}
+	
 }

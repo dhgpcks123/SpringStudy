@@ -11,6 +11,8 @@
 <script type="text/javascript" src="/cls/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 	$(function() {
+		var sid = '${SID}';
+		
 		$('.mw600 > div').css('height', '50px');
 		$('.mw600 > div').removeClass('w3-margin-top');
 		$('.mw600 > div').addClass('w3-input');
@@ -48,6 +50,12 @@
 						$('#gen').text(gender);
 						$('#jdate').text(obj.sdate);
 						$('#avt').attr('src', '/cls/avatar/' + obj.avatar);
+						if(sid != obj.id){
+							$('#iebtn, #dbtn').css('display', 'none');
+						} else {
+							$('#iebtn, #dbtn').css('display', 'block');
+						}
+						
 						$('#infoContainer').stop().slideDown(500);
 					},
 					error: function(){

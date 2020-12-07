@@ -3,8 +3,8 @@ package com.increpas.cls.util;
  * 이 클래스는 페이지 이동 기능에 필요한 정볼르 계산하고 저장하기 위해서
  * 만들어진 유틸리티적인 클래스
  * @author	오혜찬
- * @since	2020.11.09
- * @version	v.1.0
+ * @since	2020.12.04
+ * @version	v.2.0
  */
 
 public class PageUtil {
@@ -22,14 +22,34 @@ public class PageUtil {
 	private int endCont;	// 현재 페이지에서 보여줄 마지막 게시물 로우넘버
 	
 	public PageUtil() {
-		
+		nowPage = 1;
 	}
-	
+	/*
 	public PageUtil(int nowPage, int totalCount) {
 		this(nowPage, totalCount, 3, 3);
 	}
 	
 	public PageUtil(int nowPage, int totalCount, int pageRow, int pageGroup) {
+		this.nowPage = nowPage;
+		this.totalCount = totalCount;
+		this.pageRow = pageRow;
+		this.pageGroup = pageGroup;
+		
+		calcPage();
+		calcStart();
+		calcEnd();
+		calcCont();
+	}
+	*/
+	public void setPage() {
+		setPage(nowPage, totalCount, 3, 3);
+	}
+	
+	public void setPage(int nowPage, int totalCount) {
+		setPage(nowPage, totalCount, 3, 3);
+	}
+	
+	public void setPage(int nowPage, int totalCount, int pageRow, int pageGroup) {
 		this.nowPage = nowPage;
 		this.totalCount = totalCount;
 		this.pageRow = pageRow;

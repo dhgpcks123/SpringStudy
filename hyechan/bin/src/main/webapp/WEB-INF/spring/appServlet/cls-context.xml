@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+						https://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/beans 
+						https://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+	
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+ 
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- xmlns:beans="http://www.springframework.org/schema/beans"에 정의 된 거 읽을거야. xmlns:beans -->
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!--  빈처리 설정 파일 가져오기, dao여기서 가져와도 상관없어요. 근데 너무 많아지잖아요!! -->
+	<beans:import resource="daoContext.xml"/>
+	<beans:import resource="utilContext.xml"/>
+	<!--
+	<beans:import resource="jiwooContext.xml"/>
+	<beans:import resource="HwanContext.xml"/>
+	<beans:bean>
+		<beans:property name="mDao" class="com.increpas.cls.dao.MemberDao" />
+	</beans:bean>
+	-->
+	
+	
+	<context:component-scan base-package="com.increpas.cls" />
+	<!-- com.increpas.cls 스캔해서 annoation-driven.. anotation 되어있는 거 가져올거얌! -->
+</beans:beans>

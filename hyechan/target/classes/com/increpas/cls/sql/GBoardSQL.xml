@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gSQL">
+	<select id="getList" resultType="gVO" parameterType="gVO">
+			SELECT
+				*
+			FROM
+				(SELECT
+					ROWNUM rno, gg.*
+				FROM
+					(SELECT
+						gno, id, body, wdate, wdate wtime, afile avatar, cnt
+					FROM
+						guestboard, member, avatar,
+						(
+							SELECT
+								COUNT(*) cnt
+							FROM
+								guestboard g, member m
+							WHERE
+								g_mno = mno
+							<if test="id neq null">
+								AND m.id = #{id}
+							</if>
+						)
+					WHERE
+						g_mno = mno
+						AND avt = ano
+						AND guestboard.isshow = 'Y'
+					ORDER BY
+						wdate DESC
+					) gg
+				)
+			WHERE
+				rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
+	<select id="getTotal" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			guestboard
+		WHERE
+			isshow='Y'
+	</select>
+	<select id="getAvatar" resultType="string" parameterType="string">
+		SELECT
+			afile
+		FROM
+			member, avatar
+		WHERE
+			avt = ano
+			AND id = #{id}
+	</select>
+	<insert id="writeBoard" parameterType="gVO">
+		<selectKey keyProperty="gno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(gno) + 1, 1001)
+			FROM
+				guestboard
+		</selectKey>
+		
+		INSERT INTO 
+			guestboard(gno, g_mno, body)
+		VALUES(
+			#{gno}, 
+			(SELECT mno FROM member WHERE id = #{id}),
+			#{body}
+		)
+	</insert>
+	<!--
+		서브질의 쓰면 구문도 어려워지고, 속도면에서도 느리다.
+		selectkey는 insert, delete, update에 한해서만 사용가능하다
+	 -->
+</mapper>

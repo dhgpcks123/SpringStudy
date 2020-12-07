@@ -1,0 +1,256 @@
+# day02
+
+spring 프로젝트 폴더 구조
+
+	src
+		main
+			java		-- java 코딩하는 부분
+			resources 
+			webapp		-- 뷰 파일이 위치하는 부분/jsp : WebContent
+				1)		<-- jsp ok	컨트롤러 없이 호출할 수 있는 뷰
+				resources
+				WEB-INF
+					classes
+					spring
+					views
+						2)		<-- jps ok	컨트롤러를 통해서 호출해야하는 뷰
+						
+						
+-------------------------------------------------------------------------------------------
+
+스프링 MVC 프로젝트 셋팅
+
+	1. 서블릿 등록
+	
+		/WEB-INF/web.xml
+		==>
+			<!-- Processes application requests -->
+			<servlet>
+				<servlet-name>appServlet</servlet-name>
+					--> 서블릿에 부여하는 이름(개발자가 마음대로 정하면 된다
+				<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+					--> 사용할 서블릿 클래스 경로
+				<init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+						--> 지정한 서블릿 클래스의 환경 설정을 담당할
+							xml 파일을 지정하는 부분(파일이름은 아무거나 마음대로 정해도 된다)
+							단, 반드시 해당 경로에 파일이 존재해야 한다.
+							
+				</init-param>
+				<load-on-startup>1</load-on-startup>
+					--> 서블릿이 해당할 우선순위를 지정하는 태그
+			</servlet>
+			
+			
+참고 ]
+	하나의 스프링에 서블릿은 여러개 만들 수 있다.
+	그리고 각각의 서블릿은 다른 요청을 처리하도록 할 수 있다.
+	
+	예를 들어서
+	유저용 서브릿, 관리자용 서블릿을 따로 만들어서
+	각각의 다른 요청을 처리할 수 있다.
+	
+	다만 이 때는 서블릿 이름과 환경 설정파일의 이름을 다르게 지정해야 한다.
+	
+	2. URL 패턴을 지정한다.
+	==> 등록한 서블릿이 어떤 요청을 받았을 때 실행할지를 지정하는 부분
+	
+		주의 사항은 서블릿등과 반드시 한쌍으로 만들어야 한다.
+			--> 서블릿 등록에서 만든 서블릿 이름을 사용해서 맵핑이 되어야 한다.
+	
+		예 ]
+			<servlet-mapping>
+				<servlet-name>clsServlet</servlet-name>
+					--> 패턴을 적용할 서블릿 이름
+				<url-pattern>*.cls</url-pattern>
+					--> 패턴을 지정하는 부분
+			</servlet-mapping>
+	
+	참고 ]
+		기타 태그의 의미
+		
+		<context-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		</context-param>
+		
+			--> web.xml 파일에서 환경설정을 하는데 있어서
+				내용이 복잡해질 것을 대비해서 보조 환경 설정 파일을 지정하는 부분
+				
+				따라서 있어도 되고, 없어도 되는데
+				우리는 이 파일에 데이터베이스 관련 설정을 할 예정임
+	
+
+			<!-- Creates the Spring Container shared by all Servlets and Filters -->
+		<listener>
+			<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+		</listener>
+			-->	필터 처리를 하기 위해서 필터 분석 도구를 등록하는 부분
+				스프링에서 강력하게 요청하는 기능이 몇 가지 있는데
+				그 기능을 처리하기 위해서 필요한 분석도구를 등록하는 부분....
+	
+-------------------------------------------------------------------------------------------
+	
+정리 ]
+	서버가 기동이 되면
+	서버의 web.xml 을 읽고
+	스프링 프로젝트의 /WEB-INF/web.xml 을 읽는다
+	이 때 서블릿 등록이 되어야 한다
+		등록한 서블릿의 환경 설정 파일을 지정한다
+	
+-------------------------------------------------------------------------------------------
+				
+컨트롤러 제작
+	==> 스프링은 요청에 따라서 컨트롤러를 제작하지 않는다.
+		요청에 따라서 함수를 제작할 뿐이다
+		
+		따라서 컨트롤러의 갯수는 몇 개가 되어도 상관이 없고
+		다만 환경 설정 파일에 등록된 위치를 기본 베이스로 해서
+		그 하위의 만들어주면 된다.
+		
+		예 ]
+		
+			나는 지금 컨트롤러를
+			
+				com.increpas.cls.controller.m1.m2.Member.java
+			의 형태로 만들고 싶다.
+			
+			참고 ]
+				베이스 패키지만 지키면 그 하위에 몇 단계가 되던지 상관이 없다.
+		
+
+중요 ]
+	스프링은 요청을 함수단위로 등록해서 사용한다.
+	즉, 각각의 함수가 언제 실행될지(어떤 요청이 왔을 때 호출이 될지)를
+	지정해 줌으로써 함수 단위로 요청처리를 하도록 되어있다.
+	
+	따라서 함수를 제작할 때 이 함수가 어떤 요청이 왔을 때 실행될지를 지정해줘야 한다.
+	
+	명령 ]
+		@RequestMapping("요청내용")
+		
+		
+		
+	형식 ]
+		*****
+		1. 하나의 요청을 처리하는 방법
+			@RequestMapping("요청내용")
+				
+			예 ]
+			
+				@RequestMapping("/hello.cls")
+				==>	http://localhost/cls/hello/cls
+				
+				@RequestMapping("/board/boardList.cls")
+				==> http://localhost/cls/board/boardList.cls
+		
+		2. 여러 개의 요청을 한 함수에서 처리하는 방법	<==	JSP : @WebServlet({"요청1", "요청2", ...})
+		
+			@RequestMapping(path={"요청1", "요청2", ...})
+			
+			예 ]
+				@RequestMapping(path={"/hello.cls", "/board/boardList.cls"}}
+				
+				==>
+					http://localhost/cls/hello.cls
+					http://localhost/cls/board/boardList.cls
+		
+		
+		3. 요청 방식에 따라 달라지는 방법
+			==> GET 방식이냐? POST방식이냐?에 따라서 달라지는 경우
+			
+			@RequestMapping(path="/hello.cls", method=RequestMethod.POST)
+			==> post 방식으로 요청하는 경우 실행하도록 설정하는 방법
+		
+		
+		4. 파라미터 존재여부에 따라서 달라지는 방법
+			==> 특정 파라미터가 존재하는 경우에만 함수를 실행하도록 하는 방법
+			
+			@RequestMapping(param="키값")
+			
+			예 ]
+				@RequestMapping(path="/hello.cls", param="id")
+				==> 파라미터로 id가 같이 요청 전달되면서 요청되는 hello.cls에 한해 실행하세요.	
+		
+		5. 여러 파라미터의 존재 여부에 따라 달라지는 경우
+		
+			@RequestMapping(params={"키값1", "키값2", ...})
+				==> 키 값 모두 전달이 되어야 이 함수 실행하겠다~
+				
+			예 ]
+				@RequestMapping(path="/member/loginProc.cls", prams={"id", "pw"})
+				
+		6. 파라미터의 값이 특정 값인 경우 실행하는 방법
+			
+			@RequestMapping(params="키값=데이터")
+			
+			예 ]
+				@RequestMapping(path="/member/loginProc.cls",
+								params="id=jiwoo",
+								method=RequestMethod.POST);
+		
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	이상 6 가지 방법이 혼합되어서 사용되어진다.
+	혼합할 때 방법은 , 이용해서 필요한 요소를 나열하면 된다
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		
+스프링에 데이터베이스(오라클) 연동하기
+
+1. 커넥션 풀과 오라클에 필요한 라이브러리(ojdbc6)를 불러와야 한다
+
+	참고 ]
+		maven 방식에서 pom.xml파일에 필요한 라이브러리를 등록하면
+		자동설치가 된다.
+			
+		ojdbc6.jar 라이브러리 설치
+		
+		<dependency>
+		    <groupId>com.oracle.database.jdbc</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>11.2.0.4</version>
+		    <scope>system</scope>
+		    <systemPath>${basedir}/src/main/resources/lib/ojdbc6.jar</systemPath>
+		</dependency>
+		
+		커넥션 풀을 사용하기 위한 라이브러리
+		
+		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+		
+참고 ]
+	외부 저장소의 라이브러리를 가져오는 방법
+	<repositories>
+		<repository>
+			<id>레포지터리 ID</id>
+			<url>저장소 주소</url>
+		</repository>
+	</repositories>
+이 태그를 <dependencies> 태그 위에 먼저 선언하고 사용하면 된다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+		

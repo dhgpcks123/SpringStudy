@@ -14,6 +14,7 @@
 	<beans:bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
 -->
 	<bean id="mDao" class="com.increpas.cls.dao.MemberDao" />
+	<bean id="gDao" class="com.increpas.cls.dao.GBoardDao" />
 
 
 <!-- 별칭을 주게 되면?

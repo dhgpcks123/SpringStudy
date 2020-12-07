@@ -87,6 +87,29 @@
 			#{id}, #{pw}, #{name}, #{mail}, #{gen}, #{avt}
 		)
 	</insert>
-	
+	<update id="editMember" parameterType="mVO">
+		UPDATE
+			member
+		<!--
+		형식 ] <trim>
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="mail neq null">mail = #{mail},</if>
+			<if test="avt neq 0">avt = #{avt},</if>
+		</trim>
+		-->
+		<!-- 
+				참고로 마이바티스 비교 연산자
+				==	, 	eq
+				!=	,	neq
+		 -->
+		<!--
+		형식 ]  <set> -->
+		<set>
+			<if test="mail neq null">mail = #{mail},</if> 
+			<if test="avt != 0">avt = #{avt},</if> 
+		</set>
+		WHERE
+			id = #{id}
+	</update>
 	
 </mapper>

@@ -104,7 +104,8 @@ $(document).ready(function(){
 		var spw = $(this).val();
 		
 		// 정규식 패턴 만들고
-		var pattern = /^.*(?=^[a-zA-Z0-9#@!$%&-_*]{8,})(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#@!$%&-_*]).*$/;
+		var pattern = /^[0-9]{3,}$/;
+//		var pattern = /^.*(?=^[a-zA-Z0-9#@!$%&-_*]{8,})(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#@!$%&-_*]).*$/;
 		// 검사하고
 		var result = pattern.test(spw);
 		// 결과로 처리하고
@@ -156,8 +157,9 @@ $(document).ready(function(){
 		// 해당 form 태그의 encType 속성이 반드시 기술되어야 한다.
 		// 이거 공부한 이유??? 비동기통신으로 파일도 전송하기 위함
 		var el = $('#frm');
-		$(el).attr('encType', 'multipart/form-data');
-		$(el).append('<input type="hidden" name="aProc value="OK">');
+//		multipart cls-context에 설정하고 이거는 잠궈놨음.
+//		$(el).attr('encType', 'multipart/form-data');
+//		$(el).append('<input type="hidden" name="aProc value="OK">');
 		var formData = new FormData($(el)[0]);
 
 		$.ajax({

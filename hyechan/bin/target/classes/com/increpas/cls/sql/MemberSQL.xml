@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mSQL">
+	<select id="idCount" resultType="int" parameterType="string">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			member
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="login" resultType="int" parameterType="mVO" >
+<!--if : mybatis.config.xml정의를 안해뒀다? 이렇게도 쓸 수 있음  -->
+<!--<select id="login" resultType="int" parameterType="com.increpas.cls.vo.MemberVO" > -->
+		SELECT
+			COUNT(*) cnt
+		FROM
+			member
+		WHERE
+			isshow='Y'
+			AND id = #{id}
+			AND pw = #{pw}
+	</select>
+	<select id="getInfo" resultType="mVO" parameterType="string">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND id = #{id}
+	</select>
+	<select id="getInfoNo" resultType="mVO" parameterType="int">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND mno = #{tno}
+	</select>
+	<update id="del_memb" parameterType="mVO">
+		UPDATE
+			member
+		SET
+			isshow = 'N'
+		WHERE
+			mno= #{mno}
+			AND pw = #{pw}
+	</update>
+	<select id="nameList" resultType="mVO"> <!-- mybatis에서는 MemberDao에서 처리할꺼야 한 행 담을 데이터 넣어줘 -->
+		SELECT
+			mno, name 
+		FROM
+			member
+		WHERE
+			isshow='Y'
+	</select>
+	<select id="nameInfo" resultType="mVO" parameterType="mVO">
+		SELECT
+			mno, name, id, mail, m.gen, avt, joinDate, joinDate joinTime, afile avatar
+		FROM
+			member m, avatar a
+		WHERE
+			avt = ano
+			AND isshow = 'Y'
+			AND mno = #{mno}
+	</select>
+	<insert id="addMember" parameterType="mVO" >
+		<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(mno)+1, 1001)
+			FROM
+				member
+			<!-- 여기의 mno는 mVO의 mno... -->
+		</selectKey>
+		INSERT INTO
+			member(mno, id, pw, name, mail, gen, avt)
+		VALUES(
+<!-- 			(SELECT NVL(MAX(mno)+1, 1001) FROM member), -->
+			#{mno},
+			#{id}, #{pw}, #{name}, #{mail}, #{gen}, #{avt}
+		)
+	</insert>
+	
+	
+</mapper>

@@ -31,10 +31,10 @@ public class Member {
 	빈처리하면 처음에 한 거 그냥 가져다 쓰는거잖아. 뒤에꺼가 더 좋지.
  */
 	
-	@RequestMapping("/login.cls")	//	==>	클래스의 /member + 함수의 /login.cls = >/member/login.cls로 처리함
-	public String loginPage() {
-		return "member/Login";
-	}
+//	@RequestMapping("/login.cls")	//	==>	클래스의 /member + 함수의 /login.cls = >/member/login.cls로 처리함
+//	public String loginPage() {
+//		return "member/Login";
+//	}
 	
 	
 	@RequestMapping(path="/loginProc.cls", params={"id","pw"}, method=RequestMethod.POST)
@@ -110,7 +110,18 @@ public class Member {
 	}
 	@RequestMapping(value="/joinProc.cls", method=RequestMethod.POST)
 	@ResponseBody
-	public String joinProc(HttpServletRequest req, HttpSession session, MemberVO mVO) {
+	public String joinProc(HttpSession session, MemberVO mVO) {
+		String result ="OK";
+		System.out.println("### cont vo id : " + mVO.getId());
+		
+		int cnt = mDao.insertMember(mVO);
+		if(cnt == 1) {
+			session.setAttribute("SID", mVO.getId());
+		} else {
+			result = "NO";
+		}
+		
+		/*
 		MultipartRequest multi;
 		String path = req.getSession().getServletContext().getRealPath("resources/img/upload");
 		String result ="OK";
@@ -146,6 +157,7 @@ public class Member {
 		String str ="";
 			System.out.println(mVO.getId() +" 엄... ");
 		str = mVO.getId();
+		*/
 		return result;
 	}
 	/*
@@ -171,16 +183,52 @@ public class Member {
 	
 	
 	@RequestMapping("/memberInfo.cls")
-	public ModelAndView getInfo(ModelAndView mv, HttpSession session, RedirectView rv) {
-		String sid = (String) session.getAttribute("SID");
-		if(sid ==null) {
+	public ModelAndView getInfo(ModelAndView mv, HttpSession session, RedirectView rv, String id, String msg) {
+//		String sid = (String) session.getAttribute("SID");
+		if(msg != null) {
+			mv.addObject("MSG", msg);
+		}
+		if(id != null) {
+			mv.addObject("ID", id);
+		}
+		
+		if(id == null) {
 			rv.setUrl("/cls/member/login.cls");
 			mv.setView(rv);	//redirect로 뷰를 호출하는 경우
 		}else {
 			mv.setViewName("member/memberInfo");//forward로 뷰를 부르는 경우
-			MemberVO mVO = mDao.getInfo(sid);
+			MemberVO mVO = mDao.getInfo(id);
 			mv.addObject("DATA", mVO);
+			List<AvatarVO> list = mDao.getAvtList(); //avatar list 꺼내오기
+			mv.addObject("LIST", list);
+		
 		}
+		return mv;
+	}
+	
+	@RequestMapping("/memberEditProc.cls")
+	public ModelAndView memberEditProc(ModelAndView mv, MemberVO mVO) {
+		String msg = "수정에 실패했습니다.";
+		/*	
+			mv.setViewName("redirect:/member/memberInfo.cls?id="+mVO.getId()+"&msg="+msg);
+			jsp에서 파라미터 꺼내서 사용하는 방법
+				${param.msg}
+			위에껀 get방식으로 넘겨주잖아? POST방식으로 넘겨볼까??
+			전달되는 데이터는 주소표시줄에 노출되고, 데이터를 꺼내는 구문도 길어진다.
+			따라서 여기서는 리다이렉트 jsp페이지를 만들고
+			해당 페이지가 열리면 바로 POST방식으로 리다이렉트가 이루어지도록
+			처리를 해보자	
+		 */
+		int cnt = mDao.editMember(mVO);
+		if(cnt == 1) {
+			// 수정에 성공한 경우
+			msg = "수정에 성공했습니다.";
+		}
+		mv.setViewName("member/redirect");	//forward 방식 뷰 호출
+		mv.addObject("ID", mVO.getId());
+		mv.addObject("MSG", msg);
+		
+		
 		return mv;
 	}
 	
@@ -237,7 +285,7 @@ public class Member {
 		mv.addObject("LIST", list);
 		ArrayList<String> color = w3color.getList();
 		mv.addObject("COLOR", color);
-		mv.setViewName("member/memberList");
+		mv.setViewName("member/memberList");	//forward방식
 		
 		return mv;
 	}	
