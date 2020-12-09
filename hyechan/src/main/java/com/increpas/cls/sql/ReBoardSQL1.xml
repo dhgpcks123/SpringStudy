@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="reSQL">
+	<!-- 전체 게시글 수 꺼내는 질의명령 -->
+	<select id="getTotal" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			reboard
+		WHERE
+			isshow='Y'
+	</select>
+	<!-- 게시글 리스트 조회 질의명령 -->
+	<select id="getList" resultType="rVO" parameterType="page">
+		SELECT
+			rno, bno, mno, body, upno, ano, 
+				    wdate, wtime, id, avatar, step
+		FROM
+		(	SELECT
+		    	rownum rno, r.*
+			FROM
+			(
+				SELECT
+				    bno, b_mno mno, body, upno, ano, 
+				    wdate, wdate wtime, id, afile avatar, (level-1) step
+				FROM
+				    reboard re, member m, avatar a
+				WHERE
+				    re.isshow = 'Y'
+				    AND b_mno = mno
+				    AND avt = ano
+				START WITH
+				    upno IS NULL
+				CONNECT BY
+				    PRIOR bno = upno
+				ORDER SIBLINGS BY
+				    wdate DESC
+			) r
+		)
+		WHERE
+			rno BETWEEN #{startCont} AND #{endCont}
+	</select>
+	<select id="getAvatar" resultType="string" parameterType="string">
+		SELECT
+			afile
+		FROM
+			member, avatar
+		WHERE
+			avt	= ano
+			AND id = #{id}
+	</select>
+	<update id="delReBoard" parameterType="int">
+		UPDATE
+			reboard
+		SET
+			isshow= 'N'
+		WHERE
+			bno IN	(
+						SELECT
+							bno
+						FROM
+							reboard
+						WHERE
+							CONNECT_BY_ROOT bno = #{bno}
+						START WITH
+							bno = #{bno}
+						CONNECT BY
+							PRIOR bno = upno
+					)
+	</update>
+
+<!--
+	<select id="reBoardList" resultType="rVO" parameterType="rVO">
+			SELECT
+				*
+			FROM
+			(	SELECT
+			    	rownum rno, r.*
+				FROM
+				(
+				SELECT
+				    bno, b_mno mno, body, upno, wdate, id, afile avatar, (level-1) step
+				FROM
+				    reboard, member, avatar
+				WHERE
+				    reboard.isshow = 'Y'
+				    AND b_mno = mno
+				    AND avt = ano
+				START WITH
+				    upno IS NULL
+				CONNECT BY
+				    PRIOR bno = upno
+				ORDER SIBLINGS BY
+				    wdate DESC) r
+			)
+			WHERE
+				rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
+	<select id="totalCount" resultType="int">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			reboard
+		WHERE
+			isshow = 'Y'
+	</select>
+	<insert id="initRBD" parameterType="rVO">
+		
+		INSERT INTO
+				reboard(bno, b_mno, body, wdate)
+		VALUES(
+				(SELECT NVL(MAX(bno)+1, 10001) FROM reboard),
+				(SELECT mno FROM member WHERE id=#{id}),
+				#{body}, sysdate				
+		)	
+	</insert>
+	<select id="getAvtImg" resultType="string" parameterType="string">
+		SELECT
+			afile avatar
+		FROM
+			member, avatar
+		WHERE
+			avt = ano
+			AND id = #{id}
+	</select>
+	<insert id="reBoardWriteProc" parameterType="rVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(bno)+1, 10001)
+			FROM
+				reboard
+		</selectKey>
+		INSERT INTO reboard(bno, b_mno, body)
+		VALUES(
+			#{bno}, (SELECT mno FROM member WHERE id=#{id}), #{body}
+		)
+	</insert>
+	<update id="reBoardDelProc" parameterType="rVO">
+		UPDATE reboard SET isshow = 'N'		
+		WHERE
+			bno = #{bno}
+	</update>
+	<update id="reBoardEditProc" parameterType="rVO">
+		UPDATE reboard SET body = #{body}
+		WHERE
+			bno = #{bno}
+	</update>
+	<insert id="reBoardCommentProc" parameterType="rVO">
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT
+				NVL(MAX(bno)+1, 10001)
+			FROM
+				reboard
+		</selectKey>
+		INSERT INTO reboard(bno, b_mno, body, upno)
+		VALUES(
+			#{bno},
+			( SELECT mno FROM member WHERE id = #{id} ),
+			#{body},
+			#{upno}
+		)
+	</insert>
+  -->
+</mapper>

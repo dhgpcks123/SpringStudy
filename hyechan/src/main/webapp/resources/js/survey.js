@@ -26,11 +26,14 @@ $(document).ready(function(){
 	$('#sbtn').click(function(){
 		var sno = $('#cnt').val();
 		var tno = $('input:checked');
+		
 		if(sno != tno.length){
+			
+			// 문항수와 응답수가 다르면 돌려보내고
 			return;
 		}
 //		alert(tno.length);
-
+		$(tno).attr('type', 'hidden').attr('name', 'aqno');
 		$('#frm').submit();
 	});
 });

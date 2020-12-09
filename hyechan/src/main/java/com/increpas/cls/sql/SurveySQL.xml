@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="sSQL">
+	<select id="infoList" resultType="sVO" parameterType="string">
+		SELECT 
+			sno, sbody, decode(cnt, null, 0, cnt) cnt
+		FROM 
+			surveyInfo, 
+			( 
+		        SELECT 
+		            sino, count(*) cnt 
+		        FROM 
+		            surveyquest, surveyanswer, member 
+		        WHERE 
+		            sqno = sa_qno 
+		            and mno = sa_mno 
+		            and id = #{id}
+		        GROUP BY
+		        	sino 
+		    ) cnt
+		WHERE
+			sno = sino(+)
+			AND sysdate BETWEEN sstart AND send 
+	</select>
+	<select id="questList" resultType="sVO" parameterType="int">
+		SELECT 
+			sbody, sqno qno, sqbody qbody, sino sno, upno 
+		FROM 
+			surveyinfo, surveyquest 
+		WHERE 
+			sno = sino 
+			AND sno = #{sno}
+		START WITH 
+			upno IS NULL 
+		CONNECT BY 
+			PRIOR sqno = upno 
+		ORDER SIBLINGS BY 
+			sqno 
+	</select>
+	<select id="surveyResult" resultType="sVO" parameterType="int">
+		SELECT 
+			    sbody, sqno qno, sqbody qbody, sno, upno, NVL(cnt, 0) cnt, TRUNC(NVL(per, 0), 2) per 
+			FROM 
+			    surveyinfo, 
+			    surveyquest, 
+			    ( 
+			        SELECT 
+			            sa_qno, count(*) cnt, 
+			            (COUNT(*) / ( 
+			                            SELECT 
+			                                COUNT(DISTINCT sa_mno) 
+			                            FROM 
+			                                surveyanswer 
+			                        ) * 100) PER 
+			        FROM 
+			            surveyanswer 
+			        GROUP BY 
+			            sa_qno 
+			    ) 
+			WHERE 
+			    sno = sino 
+			    AND sqno = sa_qno(+) 
+			    AND sno = #{sno}
+			START WITH 
+				upno IS NULL 
+			CONNECT BY 
+				PRIOR sqno = upno 
+			ORDER SIBLINGS BY 
+				sqno 
+	</select>
+	<insert id="addAnswer" parameterType="sVO">
+		<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+			SELECT mno FROM member WHERE id = #{id}
+		</selectKey>
+		INSERT INTO
+				surveyanswer
+		VALUES(
+				(SELECT NVL(MAX(sano)+1, 10001) FROM surveyanswer),
+				#{mno}, #{qno}, sysdate
+		)	
+	</insert>
+</mapper>

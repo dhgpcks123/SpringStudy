@@ -3,6 +3,7 @@ package com.increpas.cls.controller;
 import javax.servlet.http.*;
 import java.util.*;
 
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class Member {
 //		return "member/Login";
 //	}
 	
+	private static final Logger log1 = LoggerFactory.getLogger(Member.class);
 	
 	@RequestMapping(path="/loginProc.cls", params={"id","pw"}, method=RequestMethod.POST)
 	public ModelAndView loginProc(ModelAndView mv, RedirectView rd,
@@ -47,6 +49,7 @@ public class Member {
 			rd.setUrl("/cls/member/login.cls");
 		}else{
 			session.setAttribute("SID", mVO.getId());
+			log1.info(mVO.getId() + " ] - ***** Login *****");
 			rd.setUrl("/cls/main.cls");
 		}
 			mv.setView(rd);
@@ -113,14 +116,26 @@ public class Member {
 	public String joinProc(HttpSession session, MemberVO mVO) {
 		String result ="OK";
 		System.out.println("### cont vo id : " + mVO.getId());
-		
+	//---------------------------------------------------------------
+		ArrayList<MemberVO> list = new ArrayList<MemberVO>();
+		list.add(mVO);
+//		list.add(new MemberVO()); 트랜젝션 테스트를 위해 list에 값을 두 개 넣었다. Id들어있는 것과 null.
+		int cnt = 0;
+		try {
+			cnt = mDao.insertMember(list);
+		}catch(Exception e) {
+			cnt = 0;
+		}
+	//---------------------------------------------------------------
+		/*
 		int cnt = mDao.insertMember(mVO);
+		*/
 		if(cnt == 1) {
 			session.setAttribute("SID", mVO.getId());
 		} else {
 			result = "NO";
 		}
-		
+	//---------------------------------------------------------------
 		/*
 		MultipartRequest multi;
 		String path = req.getSession().getServletContext().getRealPath("resources/img/upload");
@@ -253,7 +268,9 @@ public class Member {
 	public ModelAndView logout(ModelAndView mv, HttpSession session) {
 		
 		//세션에 기록 내용(속성 : SID)을 지운다.
+		String sid = (String) session.getAttribute("SID");
 		session.removeAttribute("SID");
+		log1.info(sid + " ] - ##### Logout #####");
 		// 뷰를 지정한다.
 		mv.setViewName("redirect:/main.cls");
 

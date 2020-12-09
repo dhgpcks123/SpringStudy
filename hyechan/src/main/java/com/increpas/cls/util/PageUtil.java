@@ -9,10 +9,10 @@ package com.increpas.cls.util;
 
 public class PageUtil {
 	private int nowPage;	// 현재 페이지 번호
+	private int totalCount;	// 총 게시물 수(필요 데이터)
 	private int totalPage;	// 총 페이지 수
-	private int totalCount;	// 총 게시물 수
 	
-	private int pageRow;	// 한 페이지에 보여줄 게시물 수
+	private int pageRow;	// 한 페이지에 보여줄 게시0물 수
 	private int pageGroup;	// 한 페이지에서 이동가능한 페이지 수
 	
 	private int startPage;	// 해당 화면에서 보여질 이동 시작 페이지
@@ -25,7 +25,7 @@ public class PageUtil {
 		nowPage = 1;
 	}
 	/*
-	public PageUtil(int nowPage, int totalCount) {
+	public PageUtil(int nowPage, int totalCount) {00000
 		this(nowPage, totalCount, 3, 3);
 	}
 	
@@ -43,6 +43,13 @@ public class PageUtil {
 	*/
 	public void setPage() {
 		setPage(nowPage, totalCount, 3, 3);
+	}
+	
+	public void setPage(int totalCount) {
+		setPage(nowPage, totalCount, 3, 3);
+	}
+	public void setPage(int totalCount, int pageRow, int pageGroup) {
+		setPage(nowPage, totalCount, pageRow, pageGroup);
 	}
 	
 	public void setPage(int nowPage, int totalCount) {

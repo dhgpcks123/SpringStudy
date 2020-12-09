@@ -148,6 +148,11 @@
 		    <artifactId>spring-jdbc</artifactId>
 		    <version>4.3.18.RELEASE</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-tx</artifactId>
+		    <version>4.3.18.RELEASE</version>
+		</dependency>
 		
 		<!--  커넥션 풀 사용 라이브러리 추가 -->
 		<dependency>
@@ -155,6 +160,7 @@
 		    <artifactId>commons-dbcp</artifactId>
 		    <version>1.4</version>
 		</dependency>
+		
 		
 
 		<!-- ojdbc6 MAVEN repository에서 가져오기-->
@@ -174,7 +180,7 @@
 		    <scope>system</scope>
 		    <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc6.jar</systemPath>
 		</dependency>
-	
+			
 		
 		<!-- myBatis Setting -->
 		<!-- myBatis 를 사용하기 위한 라이브러리  -->

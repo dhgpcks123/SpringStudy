@@ -57,6 +57,7 @@
 		
 			<!-- 정보수정태그 -->
 			<form class="w3-col" id="frm" name="frm" style="display: none;">
+				<input type="hidden" name="id" value="${SID}">
 				<div class="w3-col w3-border-top w3-margin-top w3-padding">
 					<span class="w3-cell m2 w3-button w3-small w3-blue w3-hover-aqua w3-right mt0 btnBox" id="ebtn">수 정</span>
 				</div>
@@ -72,21 +73,49 @@
 					<label class="w3-col l3 m3 w3-right-align w3-padding clslbl">아바타 선택 : </label>
 					<div class="w3-col l9 m12 w3-padding">
 						<div class="w3-col" id="avtfr">
-							<c:forEach var="data" items="${LIST}">
-								<c:if test="${data.gen == DATA.gen}">
-									<div class="w3-third w3-center w3-padding avt${data.gen}fr">
-										<input type="radio" class="w3-col w3-radio-medium avt" name="avt" value="${data.ano}">
-										<div class="w3-col w3-border imgbox">
-											<img src="/cls/img/avatar/${data.savename}" class="imgsrc">
-										</div>
-									</div>
-								</c:if>
-							</c:forEach>
+					<c:forEach var="data" items="${LIST}">
+						<c:if test="${data.gen == DATA.gen}">
+							<div class="w3-third w3-center w3-padding avt${data.gen}fr">
+								<input type="radio" class="w3-col w3-radio-medium avt" name="avt" value="${data.ano}">
+								<div class="w3-col w3-border imgbox">
+									<img src="/cls/img/avatar/${data.savename}" class="imgsrc">
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
+		
+		
+		<!-- 메세지 확인 모달 -->
+<c:if test="${not empty MSG}">
+		<div id="id01" class="w3-modal" style="display: block;">
+		  <div class="w3-modal-content">
+		 <c:if test ="${MSG ne '수정에 실패했습니다.'}">
+		    <header class="w3-container w3-teal"> 
+		      <span onclick="document.getElementById('id01').style.display='none'" 
+		      class="w3-button w3-display-topright">&times;</span>
+		      <h2>Modal Header</h2>
+		    </header>
+		 </c:if>  
+		 <c:if test ="${MSG eq '수정에 실패했습니다.'}">
+		    <header class="w3-container w3-red"> 
+		      <span onclick="document.getElementById('id01').style.display='none'" 
+		      class="w3-button w3-display-topright">&times;</span>
+		      <h2>Modal Header</h2>
+		    </header>
+		 </c:if>  
+		    <div class="w3-container w3-margin-top w3-margin-bottom">
+		      <h4 class="w3-center w3-text-grey w3-margin-top w3-margin-bottom">${MSG}</h4>
+		    </div>
+		  </div>
+		</div>
+</c:if>
+		
+		
 	</div>
 </body>
 </html>

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-	xmlns="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-						https://www.springframework.org/schema/beans/spring-beans.xsd 
+						https://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/context 
-						https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+						https://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
 		
@@ -82,4 +84,13 @@
 		  그래서 new명령을 만들지 마시오. new는 클래스마다 new만나는 순간 했었는데... spring은 젤 처음에
 		  서버열기 -> web.xml -> root-context 읽어 그렇게 모든 게 다 new 됨. 왜 그렇게 할까??? 컨테이너???
 		   -->
+		   
+		   <tx:annotation-driven/>
+		   <!-- @Transaction 쓰겠다! 위에 있는 namespace에서 어노테이션 찾아서 활성화 시켜주라~ -->
+		   <bean id="transactionManager" 
+		   		 class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		   		<property name="dataSource" ref="dataSource"/>
+		   </bean>
+		   
+		   
 </beans>

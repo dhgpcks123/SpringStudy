@@ -35,7 +35,10 @@ $(document).ready(function(){
 				spath = '/cls/reBoard/initRBD.cls';
 				break;
 			case 'rbtn':
-				spath = '/cls/reBoard/reBoardList.cls';
+				spath = '/cls/reBoard/reBoard.cls';
+				break;
+			case 'rebtn':
+				spath = '/cls/reBoard1/reBoardList.cls';
 				break;
 			case 'fbtn':
 				spath = '/cls/board/boardList.cls';

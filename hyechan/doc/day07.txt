@@ -1,0 +1,70 @@
+-> notion
+
+#day07
+
+오늘 할 일
+	- 설문조사 기능을 구현한다
+
+
+------------------------------------------------------------------------------------------------
+스프링 특징
+	1. 요청 처리가 클래스 단위가 아니고 함수단위이다
+	2. bean 처리가 가능하다
+	3. DI 기법을 사용한다
+	4. AOP 처리가 가능하다
+	
+이번 주 수업내용
+	회원 관련 기능
+	방명록 쓰기
+		
+	
+------------------------------------------------------------------------------------------------
+트랜젝션
+	: 데이터베이스의 상태를 변화시키는 하나의 논리적 기능을 수행하기 위한 작업의 단위
+		또는 한꺼번에 모두 수행되어야 할 일련의 연산들을 의미한다.
+		
+		먼저 할일
+		1. spring-tx 라이브러리를 추가해준다.
+		2. aop를 활성화 해준다.
+		
+		
+# 트랜젝션 사용 설정
+
+: 두 개 이상의 쿼리를 한 작업으로 묶어 사용하는 기법
+
+ 쿼리가 하나라도 실패하는 경우 전체 쿼리를 실패로 간주하고 롤백한다.
+
+ 
+
+### 1 ) Spring-tx 라이브러리 추가
+
+
+<!-- spring-tx -->
+<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.3.18.RELEASE</version>
+</dependency>
+
+
+### 2) AOP 활성화
+
+ appServlet의 context.xml파일 접속 후 Namespaces에서 ㅁ AOP 클릭
+
+→ transaction은 AOP기능을 사용하기 때문에 선언해준 것이다
+
+
+<aop:aspectj-autoproxy/>
+
+
+### 3 ) 어노테이션 활성화
+
+root-context.xml을 열어서 Namespaces ㅁ tx 클릭하고 아래와 같이 선언
+
+
+			<tx:annotation-driven/>
+		  <!-- Namespaces에서 어노테이션(@Transaction) 활성화 시켜주라! -->
+		  <bean id="transactionManager" 
+		  		 class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		  		<property name="dataSource" ref="dataSource"/>
+		  </bean>

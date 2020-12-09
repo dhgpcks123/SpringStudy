@@ -10,7 +10,7 @@ $(function(){
 		}
 		
 		$('#pfrm').attr('method', 'POST');
-		$('#pfrm').attr('action', '/cls/reBoard/reBoardList.cls');
+		$('#pfrm').attr('action', '/cls/reBoard/reBoard.cls');
 		$('#pfrm').prepend('<input type="hidden" name="nowPage" value="' + sno + '">');
 		$('#pfrm').submit();
 	});
@@ -97,8 +97,9 @@ $(function(){
 		// 데이터 입력태그에 셋팅하고
 		// 글번호 셋팅
 		var tno = $(this).attr('id').substring(1);
+		$('#frm').append('<input type="hidden" name="bno" id="tno">');
 		$('#tno').val(tno);
-		
+		$('#dbno').val(tno);
 		// 글내용 셋팅
 		var tbody = $(this).parent().siblings().eq(0).html().replaceAll('<br>', '\n');
 		$('#body').val(tbody);
@@ -120,7 +121,6 @@ $(function(){
 		// 데이터 읽고
 		var txt = $('#body').val();
 		var url = '/cls/reBoard/reBoardWriteProc.cls';
-		
 		if(str != 'edit'){
 			if(!txt){
 				alert('# 메세지를 입력하세요!');
@@ -137,8 +137,9 @@ $(function(){
 	
 	$('.rebtn').click(function(){
 		var tno = $(this).attr('id');
+		$('#frm').append('<input type="hidden" name="bno" id="tno">');
+		$('#dbno').val(tno);
 		$('#tno').val(tno);
-		
 		// form 태그 속성 셋팅
 		$('#frm').attr('method', 'POST');
 		$('#frm').attr('action', '/cls/reBoard/reBoardComment.cls');

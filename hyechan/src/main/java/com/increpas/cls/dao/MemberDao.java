@@ -3,6 +3,7 @@ package com.increpas.cls.dao;
 import java.util.*;
 import org.mybatis.spring.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.transaction.annotation.*;
 
 import com.increpas.cls.vo.*;
 
@@ -59,6 +60,17 @@ public class MemberDao {
 	//회원 가입 처리 전담 처리함수
 	public int insertMember(MemberVO mVO) {
 		return sqlSession.insert("mSQL.addMember", mVO);
+	}
+	
+	//여러 회원 가입 처리 (트랜잭션 테스트) 전담 처리함수
+	@Transactional
+	public int insertMember(ArrayList<MemberVO> list) {
+		int cnt = 0;
+		for(MemberVO mVO : list) {
+			System.out.println("####dao vo id"+ mVO.getId());
+			cnt += insertMember(mVO);
+		}
+		return cnt;
 	}
 
 	//회원 정보 수정 전담 처리함수

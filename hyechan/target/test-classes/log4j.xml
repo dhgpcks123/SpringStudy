@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
-<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+<!DOCTYPE 
+	log4j:configuration 
+	PUBLIC 
+	"-//APACHE//DTD LOG4J 1.2//EN" 
+	"http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration 
+	xmlns:log4j="http://jakarta.apache.org/log4j/">
 
 	<!-- Appenders -->
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
@@ -10,15 +16,58 @@
 		</layout>
 	</appender>
 	
+	<appender name="file" class="org.apache.log4j.FileAppender">
+		<param name="File" value="${catalina.base}/webapps/jiwoo/log/log.log" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" 
+					value="%-5p: %d{yyyy/MM/dd HH:mm:ss} - %m%n" />
+		</layout>
+	</appender>
+	
+	<!--
+	<appender name="rolling" class="org.apache.log4j.RollingFileAppender">
+		로그 파일 생성위치
+		<param name="file" value="${catalina.base}/webapps/jiwoo/log/rollinglog.log" />
+		<param name="Append" value="true" />
+		로그 파일 하나당 사이즈 5m
+		<param name="MaxFileSize" value="5000kb" />
+		최대 생성 파일수 ( 50개가 넘으면 순차적으로 파일이 삭제됨
+		<param name="MaxBackupIndex" value="50" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss.SSS}] 
+				%-5p %C{1}.%M(%F:%L) - %m%n"/>
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5p %C{1}.%M(%F:%L) - %m%n" />
+		</layout>
+	</appender>
+	
+	 날짜별 로그  
+    <appender name="dailyout" class="org.apache.log4j.DailyRollingFileAppender">  
+        이것은 날짜별로  로그를 남김. 파일명.확장자.DatePattern으로 정의 함  
+        <param name="file" value="${catalina.base}/webapps/jiwoo/log/daily.log"/>  
+        <param name="Append" value="true"/>  
+        <param name="DatePattern" value="'.'yyMMdd"/>  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%L] [%p] %m %n"/>  
+        </layout>  
+    </appender>
+     -->
+	
 	<!-- Application Loggers -->
 	<logger name="com.increpas.cls">
 		<level value="info" />
+		<appender-ref ref="file" />
+		<!--
+		<appender-ref ref="dailyout" />
+		<appender-ref ref="rolling" />
+		-->
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
-	</logger>	
+	</logger>
 	
 	<logger name="org.springframework.beans">
 		<level value="info" />
@@ -34,7 +83,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="info" />
+		<priority value="warn" />
 		<appender-ref ref="console" />
 	</root>
 	

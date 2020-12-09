@@ -62,6 +62,9 @@
 							<h5 class="w3-col w3-button w3-orange w3-hover-light-green" id="rbtn">댓글게시판</h5>
 						</div>
 						<div class="w3-col m3 pdh10">
+							<h5 class="w3-col w3-button w3-aqua w3-hover-light-green" id="rebtn">ReBoard</h5>
+						</div>
+						<div class="w3-col m3 pdh10">
 							<h5 class="w3-col w3-button w3-amber w3-hover-light-green" id="fbtn">파일게시판</h5>
 						</div>
 					</div>
